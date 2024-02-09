@@ -319,20 +319,6 @@ Public Class Form1
 
             answer = result1 + " " + result2
 
-        ElseIf filename.StartsWith("SHAHEEN") Then
-
-            Dim result As String = ""
-            For i As Integer = 0 To pdfLines.Count
-
-                If pdfLines(i + 1).Contains("SHAHEEN-COM") Then
-                    result = pdfLines(i + 1) + " " + pdfLines(i)
-                    Exit For
-                End If
-
-            Next i
-            answer = result
-
-
         Else
             answer = ""
 
