@@ -82,8 +82,8 @@ Public Class Form1
             osheet.Range($"C{i + 2}").Value = Raw_DateTime
 
             'Description:
-            Dim File_Description As String = Description(pdfFiles(i)) ' JUMP INTO DESCRIPTION FUNCTION:
-            osheet.Range($"D{i + 2}").Value = File_Description
+            'Dim File_Description As String = Description(pdfFiles(i)) ' JUMP INTO DESCRIPTION FUNCTION:
+            'osheet.Range($"D{i + 2}").Value = File_Description
 
         Next i
 
@@ -364,10 +364,6 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Button4_Click(sender As Object, e As EventArgs)
 
-
-
-    End Sub
 End Class
 
