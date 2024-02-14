@@ -11,83 +11,84 @@ Public Class Form1
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
 
+        ' -------------------------------------- DIRECTORY LOCATION HARD CODING: ---------------------------------------------'
 
         Dim customer_input As String = TextBox1.Text
         Dim raw_string As String = $"E:\TESTING\{customer_input}\Input\Customer Input"
 
 
         Dim folderBrowserDialog1 As New FolderBrowserDialog()
-
         folderBrowserDialog1.SelectedPath = raw_string
-
         folderBrowserDialog1.Description = "Select a Folder"
 
         If folderBrowserDialog1.ShowDialog() = DialogResult.OK Then
-
             Dim selectedFolderPath As String = folderBrowserDialog1.SelectedPath
             TB1.Text = selectedFolderPath
-
-            MessageBox.Show("Selected folder: " & selectedFolderPath)
+            'MessageBox.Show("Selected folder: " & selectedFolderPath)
 
         End If
-
-
-        ' ------------------------------------------------------------ CHANGING THE DIRECTORY LOCATION ---------------------------------------------'
+        ' -------------------------------------- CHANGING THE DIRECTORY LOCATION ---------------------------------------------'
 
         Application.DoEvents()
-        'Dim mainfolderpath1 As String = TB1.Text
-
-        ' Specify the path of the main folder
         Dim mainFolderPath As String = TB1.Text
 
-        ' Check if the main folder exists
         If Directory.Exists(mainFolderPath) Then
-            ' Get all PDF file names in the main folder and its subfolders
             pdfFiles.AddRange(Directory.GetFiles(mainFolderPath, "*.pdf", SearchOption.AllDirectories))
         End If
 
         Dim oxl As Excel.Application
         Dim owb As Excel.Workbook
         Dim osheet As Excel.Worksheet
-
-
         oxl = CreateObject("Excel.Application")
-        oxl.Visible = True
+        oxl.Visible = False
 
         'EXCEL APPLICATION:
         owb = oxl.Workbooks.Open("C:\Users\19433\Desktop\PROJECT AUTOMATES\Output.xlsx")
         Application.DoEvents()
 
-        ' Reference the first sheet (you might want to change this based on your specific sheet)
+        ' ---------------------------------------EXCEL VALIDATION FOR NULL VALUES:-----------------------------------------------
 
         osheet = CType(owb.Sheets(1), Excel.Worksheet)
+        Dim currentRow As Integer = 1
+        Dim skipRow As Integer
 
-        ' Add a value to cell A1 (you can change the cell reference as needed)
+        Do
 
-        ' ----------------------------------------------------------------EXCEL CREATION WITH RESPECTIVE COLUMNS:------------------------------------------------
+            Dim cellValue As String = osheet.Cells(currentRow, 1).Value 'osheet.Cells(ROW,COL).value
+            currentRow += 1
+
+        Loop While Not String.IsNullOrEmpty(osheet.Cells(currentRow, 1).Value)
+        skipRow = (currentRow - 1) + 1
+        MsgBox(skipRow)
+
+        Application.DoEvents()
+
+        ' ---------------------------------------EXCEL UPDATION WITH RESPECTIVE COLUMNS:-----------------------------------------------
 
         For i As Integer = 0 To pdfFiles.Count - 1
 
-
             'SerialNumber:
-            osheet.Range($"A{i + 2}").Value = i + 1
+            osheet.Range($"A{i + skipRow}").Value = i + 1
 
             'FileName:
             Dim FileNameWithExtension As String = System.IO.Path.GetFileName(pdfFiles(i))
             Dim FileName As String = FileNameWithExtension.Substring(0, FileNameWithExtension.Length - 4)
-            osheet.Range($"B{i + 2}").Value = FileName
+            osheet.Range($"B{i + skipRow}").Value = FileName
 
             'ModifiedDate:
             Dim Raw_DateTime As String = IO.File.GetLastWriteTime(pdfFiles(i)).ToString("MM-dd-yyyy")
-            osheet.Range($"C{i + 2}").Value = Raw_DateTime
+            osheet.Range($"C{i + skipRow}").Value = Raw_DateTime
 
             'Description:
-            'Dim File_Description As String = Description(pdfFiles(i)) ' JUMP INTO DESCRIPTION FUNCTION:
-            'osheet.Range($"D{i + 2}").Value = File_Description
+            Dim File_Description As String = Description(pdfFiles(i)) ' JUMP INTO DESCRIPTION FUNCTION:
+            osheet.Range($"D{i + skipRow}").Value = File_Description
 
         Next i
 
+
+        oxl.Visible = True
         MsgBox("COMPLETED!")
+        Kill_Process()
 
     End Sub
 
@@ -119,7 +120,7 @@ Public Class Form1
 
 
         'IF THE PDF FILE IS UNREADABLE OR EMPTY:
-        If pdfLines.Count = 0 Then
+        If pdfLines.Count = 0 AndAlso Not filename.StartsWith("SHAHEEN") Then
             answer = ""
             Return answer
         End If
@@ -252,7 +253,7 @@ Public Class Form1
             answer = result
 
 
-
+            'NORSOK M
         ElseIf filename.StartsWith("NORSOK M_") Then
 
 
@@ -286,7 +287,7 @@ Public Class Form1
             answer = result1 + " " + result2
 
 
-
+            'NORSOK N
         ElseIf filename.StartsWith("NORSOK N_") Then
 
 
@@ -319,12 +320,45 @@ Public Class Form1
 
             answer = result1 + " " + result2
 
-        Else
+        ElseIf filename.StartsWith("SHAHEEN") And filename.contains("_") Then
+
             answer = ""
+
+
+
+            'SHAHEEN FILES WITH SPACES:
+        ElseIf filename.StartsWith("SHAHEEN") And filename.contains(" ") Then
+
+            Dim array As String() = filename.Split(" ")
+            Dim result As String = String.Join(" ", array.Skip(1).ToArray())
+            answer = result
+
+
+
+
+            'SHAHEEN FILES WITHOUT SPACES:
+        ElseIf filename.StartsWith("SHAHEEN") AndAlso pdfLines.IndexOf("UNIT") < pdfLines.Count() Then
+
+
+            Dim count As Boolean = False
+            For Each line As String In pdfLines
+                If line.Contains("UNIT") Then
+                    count = True
+                ElseIf count Then
+                    answer = line
+                    Exit For
+                End If
+
+            Next
+
+
+        Else
+            answer = "nothing"
 
         End If
 
         Return answer
+
 
     End Function
 
@@ -332,7 +366,7 @@ Public Class Form1
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
 
 
-        Dim pdfFilePath As String = "Z:\1 Praveen Kumar\Task 6\Input\ATTACHMENT A Applied Specifications (Customer Specifications Summary)\01_General\SHAHEEN-COM-DM-PRO-0004-1 PROJECT NUMBERING PROCEDURE.pdf"
+        Dim pdfFilePath As String = "Z:\1 Praveen Kumar\Task 6\Input\ATTACHMENT C1 Data Sheet & Gas Composition Primary Buffer Composition Table\SHAHEEN-2112-ME-EDS-K-211201.pdf"
 
 
         Dim pdfLines As New List(Of String)()
@@ -362,6 +396,18 @@ Public Class Form1
 
         MsgBox("Genreated!")
 
+    End Sub
+
+    'KILL THE EXCEL APPLICATION:
+    Sub Kill_Process()
+        '------------------temp cmnt- for QC---------------------------
+        Dim xlp() As Process = Process.GetProcessesByName("EXCEL")
+        For Each ProcessX As Process In xlp
+            ProcessX.Kill()
+            If Process.GetProcessesByName("EXCEL").Count = 0 Then
+                Exit For
+            End If
+        Next
     End Sub
 
 
