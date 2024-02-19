@@ -99,25 +99,28 @@ Public Class Form1
         '-------------------------------------------------------------------------------------------------------------------------
 
         ' -------------------------------------- CHANGING THE DIRECTORY LOCATION ---------------------------------------------'
+
+        Dim oxl As Excel.Application
+        Dim owb As Excel.Workbook
+        Dim osheet As Excel.Worksheet
+        oxl = CreateObject("Excel.Application")
+        oxl.Visible = True
+
+        'EXCEL APPLICATION:
+        owb = oxl.Workbooks.Open("C:\Users\19433\Desktop\PROJECT AUTOMATES\Output.xlsx")
+        Application.DoEvents()
+
+
+
         For Each z As String In folderpath
 
 
-            Application.DoEvents()
             Dim mainFolderPath As String = z
             Dim mainiee As String = mainFolderPath.Replace("/", "\")
             If Directory.Exists(mainiee) Then
                 pdfFiles.AddRange(Directory.GetFiles(mainiee, "*.pdf", SearchOption.AllDirectories))
             End If
 
-            Dim oxl As Excel.Application
-            Dim owb As Excel.Workbook
-            Dim osheet As Excel.Worksheet
-            oxl = CreateObject("Excel.Application")
-            oxl.Visible = True
-
-            'EXCEL APPLICATION:
-            owb = oxl.Workbooks.Open("C:\Users\19433\Desktop\PROJECT AUTOMATES\Output.xlsx")
-            Application.DoEvents()
 
             ' ---------------------------------------EXCEL VALIDATION FOR NULL VALUES:-----------------------------------------------
 
