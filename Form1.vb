@@ -99,9 +99,6 @@ Public Class Form1
         '-------------------------------------------------------------------------------------------------------------------------
 
         ' -------------------------------------- CHANGING THE DIRECTORY LOCATION ---------------------------------------------'
-
-
-
         For Each z As String In folderpath
 
 
@@ -118,7 +115,9 @@ Public Class Form1
             oxl = CreateObject("Excel.Application")
             oxl.Visible = True
 
-
+            'EXCEL APPLICATION:
+            owb = oxl.Workbooks.Open("C:\Users\19433\Desktop\PROJECT AUTOMATES\Output.xlsx")
+            Application.DoEvents()
 
             ' ---------------------------------------EXCEL VALIDATION FOR NULL VALUES:-----------------------------------------------
 
