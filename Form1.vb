@@ -6,89 +6,172 @@ Imports Microsoft.Office.Interop
 
 Public Class Form1
 
+
+    Dim node1 As New List(Of TreeNode)
     Dim pdfFiles As New List(Of String)()
     Dim answer As String
+    Dim folderpath As New List(Of String)()
+
+    Private Function GetPathToRoot(node As TreeNode, path As List(Of TreeNode))
+        If node Is Nothing Then
+            Return vbEmpty
+        Else
+            path.Add(node)
+            Return GetPathToRoot(node.Parent, path)
+        End If
+    End Function
+
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        For Each selectedNode As TreeNode In node1
+            'Dim parentname As String = selectedNode.Parent.Text
+            'MessageBox.Show(GetPathToRoot(selectedNode, node1))
+            'MessageBox.Show($"{selectedNode.Parent.Text}/{selectedNode.Text}")
+            Dim answer As String
+            While selectedNode IsNot Nothing
+                answer = answer + selectedNode.Text + "*"
+                selectedNode = selectedNode.Parent
+            End While
+
+
+
+            Dim result As String = answer.Substring(0, answer.Length - 1)
+            'MsgBox(result)
+            Dim array1 As String() = result.Split("*")
+            Array.Reverse(array1)
+            Dim final As String = String.Join("\", array1)
+            folderpath.Add($"{TB1.Text}\{final}")
+            'MsgBox($"{TB1.Text}\{final}")
+            answer = ""
+        Next
+
+        MsgBox("COMPLETED!")
+
+    End Sub
+
+    Private Sub TreeView1_AfterSelect(sender As Object, e As TreeViewEventArgs) Handles TreeView1.AfterSelect
+        ' Check if the node is already selected
+        If node1.Contains(e.Node) Then
+            ' Node is already selected, so deselect it
+            Application.DoEvents()
+            TreeView1.SelectedNode = Nothing
+            node1.Remove(e.Node)
+            Application.DoEvents()
+            e.Node.BackColor = TreeView1.BackColor
+            Application.DoEvents()
+            e.Node.ForeColor = TreeView1.ForeColor
+            Application.DoEvents()
+
+
+        Else
+            ' Node is not selected, so select it
+            node1.Add(e.Node)
+            e.Node.BackColor = SystemColors.Highlight
+            e.Node.ForeColor = SystemColors.HighlightText
+        End If
+
+    End Sub
+
+    Private Sub PopulateTreeView(ByVal directory1 As String, ByVal parentNode As TreeNodeCollection)
+        Try
+            ' Get all subdirectories in the current directory
+            Dim subDirectories() As String = Directory.GetDirectories(directory1)
+
+            ' Loop through each subdirectory and add it to the TreeView
+            For Each subDirectory As String In subDirectories
+                Dim directoryNode As New TreeNode(Path.GetFileName(subDirectory))
+
+                ' Recursively call the PopulateTreeView method for subdirectories
+                PopulateTreeView(subDirectory, directoryNode.Nodes)
+
+                ' Add the directory node to the parent node
+                parentNode.Add(directoryNode)
+            Next
+        Catch ex As Exception
+            ' Handle any exceptions here
+            MessageBox.Show(ex.Message)
+        End Try
+    End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
 
         ' -------------------------------------- DIRECTORY LOCATION HARD CODING: ---------------------------------------------'
 
-        Dim customer_input As String = TextBox1.Text
-        Dim raw_string As String = $"E:\TESTING\{customer_input}\Input\Customer Input"
+        '-------------------------------------------------------------------------------------------------------------------------
 
-
-        Dim folderBrowserDialog1 As New FolderBrowserDialog()
-        folderBrowserDialog1.SelectedPath = raw_string
-        folderBrowserDialog1.Description = "Select a Folder"
-
-        If folderBrowserDialog1.ShowDialog() = DialogResult.OK Then
-            Dim selectedFolderPath As String = folderBrowserDialog1.SelectedPath
-            TB1.Text = selectedFolderPath
-            'MessageBox.Show("Selected folder: " & selectedFolderPath)
-
-        End If
         ' -------------------------------------- CHANGING THE DIRECTORY LOCATION ---------------------------------------------'
 
-        Application.DoEvents()
-        Dim mainFolderPath As String = TB1.Text
-
-        If Directory.Exists(mainFolderPath) Then
-            pdfFiles.AddRange(Directory.GetFiles(mainFolderPath, "*.pdf", SearchOption.AllDirectories))
-        End If
-
-        Dim oxl As Excel.Application
-        Dim owb As Excel.Workbook
-        Dim osheet As Excel.Worksheet
-        oxl = CreateObject("Excel.Application")
-        oxl.Visible = False
-
-        'EXCEL APPLICATION:
-        owb = oxl.Workbooks.Open("C:\Users\19433\Desktop\PROJECT AUTOMATES\Output.xlsx")
-        Application.DoEvents()
-
-        ' ---------------------------------------EXCEL VALIDATION FOR NULL VALUES:-----------------------------------------------
-
-        osheet = CType(owb.Sheets(1), Excel.Worksheet)
-        Dim currentRow As Integer = 1
-        Dim skipRow As Integer
-
-        Do
-
-            Dim cellValue As String = osheet.Cells(currentRow, 1).Value 'osheet.Cells(ROW,COL).value
-            currentRow += 1
-
-        Loop While Not String.IsNullOrEmpty(osheet.Cells(currentRow, 1).Value)
-        skipRow = (currentRow - 1) + 1
-        MsgBox(skipRow)
-
-        Application.DoEvents()
-
-        ' ---------------------------------------EXCEL UPDATION WITH RESPECTIVE COLUMNS:-----------------------------------------------
-
-        For i As Integer = 0 To pdfFiles.Count - 1
-
-            'SerialNumber:
-            osheet.Range($"A{i + skipRow}").Value = i + 1
-
-            'FileName:
-            Dim FileNameWithExtension As String = System.IO.Path.GetFileName(pdfFiles(i))
-            Dim FileName As String = FileNameWithExtension.Substring(0, FileNameWithExtension.Length - 4)
-            osheet.Range($"B{i + skipRow}").Value = FileName
-
-            'ModifiedDate:
-            Dim Raw_DateTime As String = IO.File.GetLastWriteTime(pdfFiles(i)).ToString("MM-dd-yyyy")
-            osheet.Range($"C{i + skipRow}").Value = Raw_DateTime
-
-            'Description:
-            Dim File_Description As String = Description(pdfFiles(i)) ' JUMP INTO DESCRIPTION FUNCTION:
-            osheet.Range($"D{i + skipRow}").Value = File_Description
-
-        Next i
 
 
-        oxl.Visible = True
+        For Each z As String In folderpath
+
+
+            Application.DoEvents()
+            Dim mainFolderPath As String = z
+            Dim mainiee As String = mainFolderPath.Replace("/", "\")
+            If Directory.Exists(mainiee) Then
+                pdfFiles.AddRange(Directory.GetFiles(mainiee, "*.pdf", SearchOption.AllDirectories))
+            End If
+
+            Dim oxl As Excel.Application
+            Dim owb As Excel.Workbook
+            Dim osheet As Excel.Worksheet
+            oxl = CreateObject("Excel.Application")
+            oxl.Visible = True
+
+
+
+            ' ---------------------------------------EXCEL VALIDATION FOR NULL VALUES:-----------------------------------------------
+
+            osheet = CType(owb.Sheets(1), Excel.Worksheet)
+            Dim currentRow As Integer = 1
+            Dim skipRow As Integer
+
+            Do
+
+                Dim cellValue As String = osheet.Cells(currentRow, 1).Value 'osheet.Cells(ROW,COL).value
+                currentRow += 1
+
+            Loop While Not String.IsNullOrEmpty(osheet.Cells(currentRow, 1).Value)
+            skipRow = (currentRow - 1) + 1
+            'MsgBox(skipRow)
+
+            Application.DoEvents()
+
+            ' ---------------------------------------EXCEL UPDATION WITH RESPECTIVE COLUMNS:-----------------------------------------------
+
+            For i As Integer = 0 To pdfFiles.Count - 1
+
+                Application.DoEvents()
+                'SerialNumber:
+                osheet.Range($"A{i + skipRow }").Value = i + 1
+                Application.DoEvents()
+
+                'FileName:
+                Dim FileNameWithExtension As String = System.IO.Path.GetFileName(pdfFiles(i))
+                Dim FileName As String = FileNameWithExtension.Substring(0, FileNameWithExtension.Length - 4)
+                osheet.Range($"B{i + skipRow }").Value = FileName
+                Application.DoEvents()
+
+                'ModifiedDate:
+                Dim Raw_DateTime As String = IO.File.GetLastWriteTime(pdfFiles(i)).ToString("MM-dd-yyyy")
+                osheet.Range($"C{i + skipRow }").Value = Raw_DateTime
+                Application.DoEvents()
+
+                'Description:
+                'Dim File_Description As String = Description(pdfFiles(i)) ' JUMP INTO DESCRIPTION FUNCTION:
+                'osheet.Range($"D{i + skipRow}").Value = File_Description
+
+
+            Next i
+            oxl.Visible = True
+
+        Next z
+
+        pdfFiles.Clear()
+
         MsgBox("COMPLETED!")
         Kill_Process()
+
 
     End Sub
 
@@ -409,6 +492,29 @@ Public Class Form1
             End If
         Next
     End Sub
+
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+
+        Dim customer_input As String = TextBox1.Text
+        Dim raw_string As String = $"E:\TESTING\{customer_input}\Input\Customer Input"
+
+
+        Dim folderBrowserDialog1 As New FolderBrowserDialog()
+        folderBrowserDialog1.SelectedPath = raw_string
+        folderBrowserDialog1.Description = "Select a Folder"
+
+        If folderBrowserDialog1.ShowDialog() = DialogResult.OK Then
+            Dim selectedFolderPath As String = folderBrowserDialog1.SelectedPath
+            TB1.Text = selectedFolderPath
+            'MessageBox.Show("Selected folder: " & selectedFolderPath)
+
+        End If
+
+        ' Call the PopulateTreeView method to populate the TreeView
+        PopulateTreeView(TB1.Text, TreeView1.Nodes)
+    End Sub
+
+
 
 
 End Class

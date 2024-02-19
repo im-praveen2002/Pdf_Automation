@@ -29,11 +29,14 @@ Partial Class Form1
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
+        Me.TreeView1 = New System.Windows.Forms.TreeView()
+        Me.Button4 = New System.Windows.Forms.Button()
+        Me.Button5 = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(494, 55)
+        Me.Button2.Location = New System.Drawing.Point(653, 57)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(135, 20)
         Me.Button2.TabIndex = 1
@@ -90,11 +93,39 @@ Partial Class Form1
         Me.Label2.TabIndex = 8
         Me.Label2.Text = "Current Directory"
         '
+        'TreeView1
+        '
+        Me.TreeView1.Location = New System.Drawing.Point(96, 120)
+        Me.TreeView1.Name = "TreeView1"
+        Me.TreeView1.Size = New System.Drawing.Size(574, 208)
+        Me.TreeView1.TabIndex = 9
+        '
+        'Button4
+        '
+        Me.Button4.Location = New System.Drawing.Point(686, 202)
+        Me.Button4.Name = "Button4"
+        Me.Button4.Size = New System.Drawing.Size(75, 23)
+        Me.Button4.TabIndex = 10
+        Me.Button4.Text = "VIEW"
+        Me.Button4.UseVisualStyleBackColor = True
+        '
+        'Button5
+        '
+        Me.Button5.Location = New System.Drawing.Point(686, 158)
+        Me.Button5.Name = "Button5"
+        Me.Button5.Size = New System.Drawing.Size(75, 23)
+        Me.Button5.TabIndex = 11
+        Me.Button5.Text = "SHOW"
+        Me.Button5.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.Controls.Add(Me.Button5)
+        Me.Controls.Add(Me.Button4)
+        Me.Controls.Add(Me.TreeView1)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.TextBox1)
@@ -115,4 +146,7 @@ Partial Class Form1
     Friend WithEvents TextBox1 As TextBox
     Friend WithEvents Label1 As Label
     Friend WithEvents Label2 As Label
+    Friend WithEvents TreeView1 As TreeView
+    Friend WithEvents Button4 As Button
+    Friend WithEvents Button5 As Button
 End Class
