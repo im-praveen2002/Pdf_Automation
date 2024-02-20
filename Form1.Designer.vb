@@ -23,8 +23,6 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.Button2 = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Button3 = New System.Windows.Forms.Button()
         Me.TB1 = New System.Windows.Forms.TextBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -36,30 +34,12 @@ Partial Class Form1
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(653, 57)
+        Me.Button2.Location = New System.Drawing.Point(308, 334)
         Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(135, 20)
+        Me.Button2.Size = New System.Drawing.Size(161, 26)
         Me.Button2.TabIndex = 1
         Me.Button2.Text = "EXCEL UPDATE"
         Me.Button2.UseVisualStyleBackColor = True
-        '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(35, 392)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(78, 32)
-        Me.Button1.TabIndex = 2
-        Me.Button1.Text = "RUN DESC"
-        Me.Button1.UseVisualStyleBackColor = True
-        '
-        'Button3
-        '
-        Me.Button3.Location = New System.Drawing.Point(119, 392)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(75, 32)
-        Me.Button3.TabIndex = 3
-        Me.Button3.Text = "PDF DESC"
-        Me.Button3.UseVisualStyleBackColor = True
         '
         'TB1
         '
@@ -78,18 +58,20 @@ Partial Class Form1
         'Label1
         '
         Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("Times New Roman", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.Location = New System.Drawing.Point(46, 15)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(78, 13)
+        Me.Label1.Size = New System.Drawing.Size(103, 19)
         Me.Label1.TabIndex = 8
         Me.Label1.Text = "Customer Input"
         '
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(46, 61)
+        Me.Label2.Font = New System.Drawing.Font("Times New Roman", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Location = New System.Drawing.Point(46, 55)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(86, 13)
+        Me.Label2.Size = New System.Drawing.Size(116, 19)
         Me.Label2.TabIndex = 8
         Me.Label2.Text = "Current Directory"
         '
@@ -102,20 +84,21 @@ Partial Class Form1
         '
         'Button4
         '
-        Me.Button4.Location = New System.Drawing.Point(686, 202)
+        Me.Button4.Location = New System.Drawing.Point(676, 203)
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(75, 23)
         Me.Button4.TabIndex = 10
-        Me.Button4.Text = "VIEW"
+        Me.Button4.Text = "SELECTED"
         Me.Button4.UseVisualStyleBackColor = True
+        Me.Button4.Visible = False
         '
         'Button5
         '
-        Me.Button5.Location = New System.Drawing.Point(686, 158)
+        Me.Button5.Location = New System.Drawing.Point(484, 12)
         Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(75, 23)
+        Me.Button5.Size = New System.Drawing.Size(75, 20)
         Me.Button5.TabIndex = 11
-        Me.Button5.Text = "SHOW"
+        Me.Button5.Text = "OK"
         Me.Button5.UseVisualStyleBackColor = True
         '
         'Form1
@@ -130,8 +113,6 @@ Partial Class Form1
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.TB1)
-        Me.Controls.Add(Me.Button3)
-        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.Button2)
         Me.Name = "Form1"
         Me.Text = "Form1"
@@ -140,8 +121,6 @@ Partial Class Form1
 
     End Sub
     Friend WithEvents Button2 As Button
-    Friend WithEvents Button1 As Button
-    Friend WithEvents Button3 As Button
     Friend WithEvents TB1 As TextBox
     Friend WithEvents TextBox1 As TextBox
     Friend WithEvents Label1 As Label
