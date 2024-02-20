@@ -11,6 +11,7 @@ Public Class Form1
     Dim pdfFiles As New List(Of String)()
     Dim answer As String
     Dim folderpath As New List(Of String)()
+    Dim FileName As New List(Of String)
 
     'AFTER THE CUSTOMER INPUT BUTTON:
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
@@ -20,7 +21,6 @@ Public Class Form1
         Dim raw_string As String = $"\\fileserver1\Temp\1 Praveen Kumar\ENGG_PRODUCTION\CurrentProject\{customer_input}\Customer Input"
         'Dim raw_string As String = $"\\fileserver1\ENGG_PRODUCTION\Current Project\{customer_input}\INPUTS\Customer Input"
         'Dim raw_string As String = $"C:\Users\19433\Desktop\PROJECT AUTOMATES\{customer_input}"
-
 
         TB1.Text = raw_string
         'Dim folderBrowserDialog1 As New FolderBrowserDialog()
@@ -119,8 +119,6 @@ Public Class Form1
 
         ' -------------------------------------- DIRECTORY LOCATION HARD CODING: ---------------------------------------------'
 
-        '-------------------------------------------------------------------------------------------------------------------------
-
         ' -------------------------------------- CHANGING THE DIRECTORY LOCATION ---------------------------------------------'
 
         Dim oxl As Excel.Application
@@ -210,19 +208,11 @@ Public Class Form1
         Next z
 
         oxl.Visible = True
-        pdfFiles.Clear()
-        'view()
+        view()
         MsgBox("COMPLETED!")
         Kill_Process()
+        pdfFiles.Clear()
 
-
-    End Sub
-
-    'VIEW THE FOLDERPATH:
-    Private Sub view()
-
-        Dim result As String = String.Join(" ", folderpath)
-        MsgBox(result)
 
     End Sub
 
@@ -238,6 +228,44 @@ Public Class Form1
             End If
         Next
     End Sub
+
+
+    'VIEW THE FOLDERPATH:
+    Private Sub view()
+
+        'Dim result As String = String.Join(" ", folderpath)
+        'MsgBox(result)
+        MsgBox(pdfFiles(0))
+    End Sub
+
+
+    'FINDING THE REPEATED PDF FILES:
+    Private Sub Modification()
+
+        For Each i As String In pdfFiles
+            Dim splited As String() = i.Split("/")
+            FileName.Add(splited(splited.Length - 1))
+        Next
+
+    End Sub
+
+    'FINDING THE DUPLICATES :
+    Private Sub Duplication()
+
+        Dim myDictionary As New Dictionary(Of String, Integer)
+
+        For Each i As String In FileName
+
+            If myDictionary.ContainsKey(i) Then
+                myDictionary(i) += 1
+            Else
+                myDictionary(i) = 1
+            End If
+
+        Next
+
+    End Sub
+
 
 End Class
 
