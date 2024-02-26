@@ -1,7 +1,4 @@
 ﻿Imports System.IO
-Imports iText.Kernel.Pdf
-Imports iText.Kernel.Pdf.Canvas.Parser
-Imports iText.Kernel.Pdf.Canvas.Parser.Listener
 Imports Microsoft.Office.Interop
 
 Public Class Form1
@@ -18,24 +15,24 @@ Public Class Form1
 
         Dim customer_input As String = TextBox1.Text
         'Dim raw_string As String = $"E:\TESTING\{customer_input}\Input\Customer Input"
-        Dim raw_string As String = $"\\fileserver1\Temp\1 Praveen Kumar\ENGG_PRODUCTION\CurrentProject\{customer_input}\Customer Input"
-        'Dim raw_string As String = $"\\fileserver1\ENGG_PRODUCTION\Current Project\{customer_input}\INPUTS\Customer Input"
+        'Dim raw_string As String = $"\\fileserver1\Temp\1 Praveen Kumar\ENGG_PRODUCTION\CurrentProject\{customer_input}\Customer Input"
+        Dim raw_string As String = $"\\fileserver1\ENGG_PRODUCTION\Current Project\{customer_input}\INPUTS\Customer Input"
         'Dim raw_string As String = $"C:\Users\19433\Desktop\PROJECT AUTOMATES\{customer_input}"
 
-        TB1.Text = raw_string
+        TextBox2.Text = raw_string
         'Dim folderBrowserDialog1 As New FolderBrowserDialog()
         'folderBrowserDialog1.SelectedPath = raw_string
         'folderBrowserDialog1.Description = "Select a Folder"
 
         'If folderBrowserDialog1.ShowDialog() = DialogResult.OK Then
         '    Dim selectedFolderPath As String = folderBrowserDialog1.SelectedPath
-        '    TB1.Text = selectedFolderPath
+        '    TextBox2.Text = selectedFolderPath
         '    'MessageBox.Show("Selected folder: " & selectedFolderPath)
 
         'End If
 
         ' Call the PopulateTreeView method to populate the TreeView
-        PopulateTreeView(TB1.Text, TreeView1.Nodes)
+        PopulateTreeView(TextBox2.Text, TreeView1.Nodes)
 
     End Sub
 
@@ -97,7 +94,7 @@ Public Class Form1
             'Dim parentname As String = selectedNode.Parent.Text
             'MessageBox.Show(GetPathToRoot(selectedNode, node1))
             'MessageBox.Show($"{selectedNode.Parent.Text}/{selectedNode.Text}")
-            Dim answer As String
+            Dim answer As String = ""
             While selectedNode IsNot Nothing
                 answer = answer + selectedNode.Text + "*"
                 selectedNode = selectedNode.Parent
@@ -110,8 +107,8 @@ Public Class Form1
             Dim array1 As String() = result.Split("*")
             Array.Reverse(array1)
             Dim final As String = String.Join("\", array1)
-            folderpath.Add($"{TB1.Text}\{final}")
-            'MsgBox($"{TB1.Text}\{final}")
+            folderpath.Add($"{TextBox2.Text}\{final}")
+            'MsgBox($"{TextBox2.Text}\{final}")
             answer = ""
         Next
 
@@ -208,9 +205,9 @@ Public Class Form1
         Next z
 
         oxl.Visible = True
-        view()
+        'view()
         MsgBox("COMPLETED!")
-        Kill_Process()
+        'Kill_Process()
         pdfFiles.Clear()
 
 
@@ -230,41 +227,8 @@ Public Class Form1
     End Sub
 
 
-    'VIEW THE FOLDERPATH:
-    Private Sub view()
-
-        'Dim result As String = String.Join(" ", folderpath)
-        'MsgBox(result)
-        MsgBox(pdfFiles(0))
-    End Sub
 
 
-    'FINDING THE REPEATED PDF FILES:
-    Private Sub Modification()
-
-        For Each i As String In pdfFiles
-            Dim splited As String() = i.Split("/")
-            FileName.Add(splited(splited.Length - 1))
-        Next
-
-    End Sub
-
-    'FINDING THE DUPLICATES :
-    Private Sub Duplication()
-
-        Dim myDictionary As New Dictionary(Of String, Integer)
-
-        For Each i As String In FileName
-
-            If myDictionary.ContainsKey(i) Then
-                myDictionary(i) += 1
-            Else
-                myDictionary(i) = 1
-            End If
-
-        Next
-
-    End Sub
 
 
 End Class

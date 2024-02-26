@@ -23,7 +23,7 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.Button2 = New System.Windows.Forms.Button()
-        Me.TB1 = New System.Windows.Forms.TextBox()
+        Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
@@ -41,12 +41,12 @@ Partial Class Form1
         Me.Button2.Text = "EXCEL UPDATE"
         Me.Button2.UseVisualStyleBackColor = True
         '
-        'TB1
+        'TextBox2
         '
-        Me.TB1.Location = New System.Drawing.Point(176, 55)
-        Me.TB1.Name = "TB1"
-        Me.TB1.Size = New System.Drawing.Size(293, 20)
-        Me.TB1.TabIndex = 5
+        Me.TextBox2.Location = New System.Drawing.Point(176, 55)
+        Me.TextBox2.Name = "TextBox2"
+        Me.TextBox2.Size = New System.Drawing.Size(293, 20)
+        Me.TextBox2.TabIndex = 5
         '
         'TextBox1
         '
@@ -112,7 +112,7 @@ Partial Class Form1
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.TextBox1)
-        Me.Controls.Add(Me.TB1)
+        Me.Controls.Add(Me.TextBox2)
         Me.Controls.Add(Me.Button2)
         Me.Name = "Form1"
         Me.Text = "Form1"
@@ -121,7 +121,7 @@ Partial Class Form1
 
     End Sub
     Friend WithEvents Button2 As Button
-    Friend WithEvents TB1 As TextBox
+    Friend WithEvents TextBox2 As TextBox
     Friend WithEvents TextBox1 As TextBox
     Friend WithEvents Label1 As Label
     Friend WithEvents Label2 As Label
