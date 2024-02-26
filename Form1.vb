@@ -206,9 +206,10 @@ Public Class Form1
 
         oxl.Visible = True
         'view()
-        MsgBox("COMPLETED!")
+        'MsgBox("COMPLETED!")
+        Me.WindowState = FormWindowState.Maximized
         'Kill_Process()
-        pdfFiles.Clear()
+
 
 
     End Sub
@@ -226,10 +227,24 @@ Public Class Form1
         Next
     End Sub
 
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+
+        TextBox1.Text = ""
+        TextBox2.Text = ""
+        TreeView1.Nodes.Clear()
+        pdfFiles.Clear()
+        node1.Clear()
+        answer = ""
+        folderpath.Clear()
+        FileName.Clear()
+
+    End Sub
+
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
 
+        Me.WindowState = FormWindowState.Maximized
 
-
-
+    End Sub
 End Class
 

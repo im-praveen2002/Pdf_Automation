@@ -34,7 +34,7 @@ Partial Class Form1
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(308, 334)
+        Me.Button2.Location = New System.Drawing.Point(517, 726)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(161, 26)
         Me.Button2.TabIndex = 1
@@ -43,14 +43,14 @@ Partial Class Form1
         '
         'TextBox2
         '
-        Me.TextBox2.Location = New System.Drawing.Point(176, 55)
+        Me.TextBox2.Location = New System.Drawing.Point(447, 81)
         Me.TextBox2.Name = "TextBox2"
         Me.TextBox2.Size = New System.Drawing.Size(293, 20)
         Me.TextBox2.TabIndex = 5
         '
         'TextBox1
         '
-        Me.TextBox1.Location = New System.Drawing.Point(176, 12)
+        Me.TextBox1.Location = New System.Drawing.Point(447, 16)
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.Size = New System.Drawing.Size(293, 20)
         Me.TextBox1.TabIndex = 6
@@ -59,7 +59,7 @@ Partial Class Form1
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Times New Roman", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(46, 15)
+        Me.Label1.Location = New System.Drawing.Point(255, 17)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(103, 19)
         Me.Label1.TabIndex = 8
@@ -69,7 +69,7 @@ Partial Class Form1
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Times New Roman", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(46, 55)
+        Me.Label2.Location = New System.Drawing.Point(255, 82)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(116, 19)
         Me.Label2.TabIndex = 8
@@ -77,24 +77,23 @@ Partial Class Form1
         '
         'TreeView1
         '
-        Me.TreeView1.Location = New System.Drawing.Point(96, 120)
+        Me.TreeView1.Location = New System.Drawing.Point(109, 149)
         Me.TreeView1.Name = "TreeView1"
-        Me.TreeView1.Size = New System.Drawing.Size(574, 208)
+        Me.TreeView1.Size = New System.Drawing.Size(988, 544)
         Me.TreeView1.TabIndex = 9
         '
         'Button4
         '
-        Me.Button4.Location = New System.Drawing.Point(676, 203)
+        Me.Button4.Location = New System.Drawing.Point(1128, 334)
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(75, 23)
         Me.Button4.TabIndex = 10
-        Me.Button4.Text = "SELECTED"
+        Me.Button4.Text = "CLEAR"
         Me.Button4.UseVisualStyleBackColor = True
-        Me.Button4.Visible = False
         '
         'Button5
         '
-        Me.Button5.Location = New System.Drawing.Point(484, 12)
+        Me.Button5.Location = New System.Drawing.Point(784, 14)
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(75, 20)
         Me.Button5.TabIndex = 11
@@ -105,7 +104,7 @@ Partial Class Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.ClientSize = New System.Drawing.Size(1315, 863)
         Me.Controls.Add(Me.Button5)
         Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.TreeView1)
