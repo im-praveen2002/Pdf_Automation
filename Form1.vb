@@ -175,6 +175,7 @@ Public Class Form1
 
                 'ModifiedDate:
                 'Dim Raw_DateTime As String = IO.File.GetLastWriteTime(pdfFiles(i)).ToString("MM-DD-YYYY")
+                'Dim Raw_DateTime As String = IO.File.GetLastWriteTime(pdfFiles(i)).ToString("dd-MM-yyyy")
                 'osheet.Range($"C{i + skipRow }").Value = Raw_DateTime
                 'Application.DoEvents()
 
@@ -229,14 +230,16 @@ Public Class Form1
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
 
-        TextBox1.Text = ""
-        TextBox2.Text = ""
-        TreeView1.Nodes.Clear()
+        'TreeView1.SelectedNode = Nothing
+        TreeView1.HideSelection = False
+        Application.DoEvents()
+        'TreeView1.Nodes.Clear()
         pdfFiles.Clear()
         node1.Clear()
         answer = ""
         folderpath.Clear()
         FileName.Clear()
+        DeselectAllNodes(TreeView1)
 
     End Sub
 
@@ -245,6 +248,26 @@ Public Class Form1
 
         Me.WindowState = FormWindowState.Maximized
 
+    End Sub
+
+    Private Sub DeselectAllNodes(treeView As TreeView)
+        For Each node As TreeNode In treeView.Nodes
+            DeselectNode(node)
+        Next
+    End Sub
+
+    Private Sub DeselectNode(node As TreeNode)
+        If node.IsSelected Then
+            node.TreeView.SelectedNode = Nothing
+            Application.DoEvents()
+            node.BackColor = SystemColors.Window
+            node.ForeColor = SystemColors.WindowText
+            Application.DoEvents()
+        End If
+
+        For Each childNode As TreeNode In node.Nodes
+            DeselectNode(childNode)
+        Next
     End Sub
 End Class
 

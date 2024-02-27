@@ -77,6 +77,7 @@ Partial Class Form1
         '
         'TreeView1
         '
+        Me.TreeView1.HideSelection = False
         Me.TreeView1.Location = New System.Drawing.Point(109, 149)
         Me.TreeView1.Name = "TreeView1"
         Me.TreeView1.Size = New System.Drawing.Size(988, 544)
