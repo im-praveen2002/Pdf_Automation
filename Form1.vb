@@ -140,6 +140,7 @@ Public Class Form1
         Loop While Not String.IsNullOrEmpty(osheet.Cells(currentRow, 1).Value)
         skipRow = (currentRow - 1) + 1
 
+        MsgBox(skipRow)
 
         For Each z As String In folderpath
 
@@ -164,7 +165,8 @@ Public Class Form1
 
                 Application.DoEvents()
                 'SerialNumber:
-                osheet.Range($"A{i + skipRow }").Value = i + 1
+                'osheet.Range($"A{i + skipRow }").Value = i + 1
+                osheet.Range($"A{i + skipRow }").Value = i + (skipRow - 1)
                 Application.DoEvents()
 
                 'FileName:
