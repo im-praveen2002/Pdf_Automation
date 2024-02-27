@@ -3,7 +3,6 @@ Imports Microsoft.Office.Interop
 
 Public Class Form1
 
-
     Dim node1 As New List(Of TreeNode)
     Dim pdfFiles As New List(Of String)()
     Dim answer As String
@@ -14,24 +13,9 @@ Public Class Form1
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
 
         Dim customer_input As String = TextBox1.Text
-        'Dim raw_string As String = $"E:\TESTING\{customer_input}\Input\Customer Input"
-        'Dim raw_string As String = $"\\fileserver1\Temp\1 Praveen Kumar\ENGG_PRODUCTION\CurrentProject\{customer_input}\Customer Input"
         Dim raw_string As String = $"\\fileserver1\ENGG_PRODUCTION\Current Project\{customer_input}\INPUTS\Customer Input\{TextBox2.Text}"
-        'Dim raw_string As String = $"C:\Users\19433\Desktop\PROJECT AUTOMATES\{customer_input}"
 
         TextBox3.Text = raw_string
-        'Dim folderBrowserDialog1 As New FolderBrowserDialog()
-        'folderBrowserDialog1.SelectedPath = raw_string
-        'folderBrowserDialog1.Description = "Select a Folder"
-
-        'If folderBrowserDialog1.ShowDialog() = DialogResult.OK Then
-        '    Dim selectedFolderPath As String = folderBrowserDialog1.SelectedPath
-        '    TextBox2.Text = selectedFolderPath
-        '    'MessageBox.Show("Selected folder: " & selectedFolderPath)
-
-        'End If
-
-        ' Call the PopulateTreeView method to populate the TreeView
         PopulateTreeView(TextBox3.Text, TreeView1.Nodes)
 
     End Sub
@@ -83,7 +67,6 @@ Public Class Form1
         End If
 
     End Sub
-
 
     'EXCEL UPDATE BUTTON:
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
@@ -217,19 +200,6 @@ Public Class Form1
 
     End Sub
 
-
-    'KILL THE EXCEL APPLICATION:
-    Sub Kill_Process()
-        '------------------temp cmnt- for QC---------------------------
-        Dim xlp() As Process = Process.GetProcessesByName("EXCEL")
-        For Each ProcessX As Process In xlp
-            ProcessX.Kill()
-            If Process.GetProcessesByName("EXCEL").Count = 0 Then
-                Exit For
-            End If
-        Next
-    End Sub
-
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
 
         'TreeView1.SelectedNode = Nothing
@@ -272,9 +242,17 @@ Public Class Form1
         Next
     End Sub
 
-    'SELECTALL BUTTON:
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-
+    'KILL THE EXCEL APPLICATION:
+    Sub Kill_Process()
+        '------------------temp cmnt- for QC---------------------------
+        Dim xlp() As Process = Process.GetProcessesByName("EXCEL")
+        For Each ProcessX As Process In xlp
+            ProcessX.Kill()
+            If Process.GetProcessesByName("EXCEL").Count = 0 Then
+                Exit For
+            End If
+        Next
     End Sub
+
 End Class
 
