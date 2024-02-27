@@ -23,13 +23,15 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.Button2 = New System.Windows.Forms.Button()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TreeView1 = New System.Windows.Forms.TreeView()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.Button5 = New System.Windows.Forms.Button()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.TextBox3 = New System.Windows.Forms.Label()
+        Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.SuspendLayout()
         '
         'Button2
@@ -40,13 +42,6 @@ Partial Class Form1
         Me.Button2.TabIndex = 1
         Me.Button2.Text = "EXCEL UPDATE"
         Me.Button2.UseVisualStyleBackColor = True
-        '
-        'TextBox2
-        '
-        Me.TextBox2.Location = New System.Drawing.Point(447, 81)
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(293, 20)
-        Me.TextBox2.TabIndex = 5
         '
         'TextBox1
         '
@@ -61,9 +56,9 @@ Partial Class Form1
         Me.Label1.Font = New System.Drawing.Font("Times New Roman", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.Location = New System.Drawing.Point(255, 17)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(103, 19)
+        Me.Label1.Size = New System.Drawing.Size(122, 19)
         Me.Label1.TabIndex = 8
-        Me.Label1.Text = "Customer Input"
+        Me.Label1.Text = "PROJECT CODE"
         '
         'Label2
         '
@@ -71,9 +66,9 @@ Partial Class Form1
         Me.Label2.Font = New System.Drawing.Font("Times New Roman", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.Location = New System.Drawing.Point(255, 82)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(116, 19)
+        Me.Label2.Size = New System.Drawing.Size(110, 19)
         Me.Label2.TabIndex = 8
-        Me.Label2.Text = "Current Directory"
+        Me.Label2.Text = "FOLDER PATH"
         '
         'TreeView1
         '
@@ -94,25 +89,53 @@ Partial Class Form1
         '
         'Button5
         '
-        Me.Button5.Location = New System.Drawing.Point(784, 14)
+        Me.Button5.Location = New System.Drawing.Point(773, 50)
         Me.Button5.Name = "Button5"
         Me.Button5.Size = New System.Drawing.Size(75, 20)
         Me.Button5.TabIndex = 11
         Me.Button5.Text = "OK"
         Me.Button5.UseVisualStyleBackColor = True
         '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Times New Roman", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.Location = New System.Drawing.Point(255, 50)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(77, 19)
+        Me.Label3.TabIndex = 8
+        Me.Label3.Text = "TASK NO"
+        '
+        'TextBox3
+        '
+        Me.TextBox3.AutoSize = True
+        Me.TextBox3.Location = New System.Drawing.Point(444, 88)
+        Me.TextBox3.Name = "TextBox3"
+        Me.TextBox3.Size = New System.Drawing.Size(39, 13)
+        Me.TextBox3.TabIndex = 12
+        Me.TextBox3.Text = "Label4"
+        '
+        'TextBox2
+        '
+        Me.TextBox2.Location = New System.Drawing.Point(447, 51)
+        Me.TextBox2.Name = "TextBox2"
+        Me.TextBox2.Size = New System.Drawing.Size(293, 20)
+        Me.TextBox2.TabIndex = 13
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1315, 863)
+        Me.Controls.Add(Me.TextBox2)
+        Me.Controls.Add(Me.TextBox3)
         Me.Controls.Add(Me.Button5)
         Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.TreeView1)
         Me.Controls.Add(Me.Label2)
+        Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.TextBox1)
-        Me.Controls.Add(Me.TextBox2)
         Me.Controls.Add(Me.Button2)
         Me.Name = "Form1"
         Me.Text = "Form1"
@@ -121,11 +144,13 @@ Partial Class Form1
 
     End Sub
     Friend WithEvents Button2 As Button
-    Friend WithEvents TextBox2 As TextBox
     Friend WithEvents TextBox1 As TextBox
     Friend WithEvents Label1 As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents TreeView1 As TreeView
     Friend WithEvents Button4 As Button
     Friend WithEvents Button5 As Button
+    Friend WithEvents Label3 As Label
+    Friend WithEvents TextBox3 As Label
+    Friend WithEvents TextBox2 As TextBox
 End Class

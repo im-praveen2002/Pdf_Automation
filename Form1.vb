@@ -16,10 +16,10 @@ Public Class Form1
         Dim customer_input As String = TextBox1.Text
         'Dim raw_string As String = $"E:\TESTING\{customer_input}\Input\Customer Input"
         'Dim raw_string As String = $"\\fileserver1\Temp\1 Praveen Kumar\ENGG_PRODUCTION\CurrentProject\{customer_input}\Customer Input"
-        Dim raw_string As String = $"\\fileserver1\ENGG_PRODUCTION\Current Project\{customer_input}\INPUTS\Customer Input"
+        Dim raw_string As String = $"\\fileserver1\ENGG_PRODUCTION\Current Project\{customer_input}\INPUTS\Customer Input\{TextBox2.Text}"
         'Dim raw_string As String = $"C:\Users\19433\Desktop\PROJECT AUTOMATES\{customer_input}"
 
-        TextBox2.Text = raw_string
+        TextBox3.Text = raw_string
         'Dim folderBrowserDialog1 As New FolderBrowserDialog()
         'folderBrowserDialog1.SelectedPath = raw_string
         'folderBrowserDialog1.Description = "Select a Folder"
@@ -32,7 +32,7 @@ Public Class Form1
         'End If
 
         ' Call the PopulateTreeView method to populate the TreeView
-        PopulateTreeView(TextBox2.Text, TreeView1.Nodes)
+        PopulateTreeView(TextBox3.Text, TreeView1.Nodes)
 
     End Sub
 
