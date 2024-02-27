@@ -99,15 +99,17 @@ Public Class Form1
             Array.Reverse(array1)
             Dim final As String = String.Join("\", array1)
             folderpath.Add($"{newpath}\{final}")
-            MsgBox($"{newpath}\{final}")
+            'MsgBox($"{newpath}\{final}")
             answer = ""
         Next
 
-        MsgBox("COLLECTED!")
+        MsgBox("WAIT! UNTILL THE EXCEL POPUPS")
 
         ' -------------------------------------- DIRECTORY LOCATION HARD CODING: ---------------------------------------------'
 
         ' -------------------------------------- CHANGING THE DIRECTORY LOCATION ---------------------------------------------'
+
+#Region "EXCEL OPERATION"
 
         Dim oxl As Excel.Application
         Dim owb As Excel.Workbook
@@ -197,29 +199,22 @@ Public Class Form1
 
             Next i
         Next z
+#End Region
 
         oxl.Visible = True
-        'view()
-        'MsgBox("COMPLETED!")
         Me.WindowState = FormWindowState.Maximized
+
+#Region "RELOADS"
         'Kill_Process()
-
-
-
-    End Sub
-
-    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
-
-        'TreeView1.SelectedNode = Nothing
-        'TreeView1.HideSelection = False
-        'Application.DoEvents()
-
         TreeView1.Nodes.Clear()
         pdfFiles.Clear()
         node1.Clear()
         answer = ""
         folderpath.Clear()
         FileName.Clear()
+        newpath = ""
+#End Region
+
 
     End Sub
 

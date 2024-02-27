@@ -27,7 +27,6 @@ Partial Class Form1
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TreeView1 = New System.Windows.Forms.TreeView()
-        Me.Button4 = New System.Windows.Forms.Button()
         Me.Button5 = New System.Windows.Forms.Button()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.TextBox3 = New System.Windows.Forms.Label()
@@ -36,25 +35,27 @@ Partial Class Form1
         '
         'Button2
         '
-        Me.Button2.Location = New System.Drawing.Point(517, 726)
+        Me.Button2.Font = New System.Drawing.Font("Times New Roman", 12.0!)
+        Me.Button2.Location = New System.Drawing.Point(697, 748)
         Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(161, 26)
+        Me.Button2.Size = New System.Drawing.Size(368, 25)
         Me.Button2.TabIndex = 1
         Me.Button2.Text = "EXCEL UPDATE"
         Me.Button2.UseVisualStyleBackColor = True
         '
         'TextBox1
         '
-        Me.TextBox1.Location = New System.Drawing.Point(447, 16)
+        Me.TextBox1.Font = New System.Drawing.Font("Times New Roman", 12.0!)
+        Me.TextBox1.Location = New System.Drawing.Point(649, 20)
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(293, 20)
+        Me.TextBox1.Size = New System.Drawing.Size(416, 26)
         Me.TextBox1.TabIndex = 6
         '
         'Label1
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Times New Roman", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(255, 17)
+        Me.Label1.Location = New System.Drawing.Point(444, 27)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(122, 19)
         Me.Label1.TabIndex = 8
@@ -64,7 +65,7 @@ Partial Class Form1
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Times New Roman", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(255, 82)
+        Me.Label2.Location = New System.Drawing.Point(444, 116)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(110, 19)
         Me.Label2.TabIndex = 8
@@ -72,26 +73,19 @@ Partial Class Form1
         '
         'TreeView1
         '
+        Me.TreeView1.Font = New System.Drawing.Font("Times New Roman", 12.0!)
         Me.TreeView1.HideSelection = False
-        Me.TreeView1.Location = New System.Drawing.Point(109, 149)
+        Me.TreeView1.Location = New System.Drawing.Point(279, 154)
         Me.TreeView1.Name = "TreeView1"
-        Me.TreeView1.Size = New System.Drawing.Size(988, 544)
+        Me.TreeView1.Size = New System.Drawing.Size(1222, 544)
         Me.TreeView1.TabIndex = 9
-        '
-        'Button4
-        '
-        Me.Button4.Location = New System.Drawing.Point(1124, 380)
-        Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(75, 23)
-        Me.Button4.TabIndex = 10
-        Me.Button4.Text = "CLEAR"
-        Me.Button4.UseVisualStyleBackColor = True
         '
         'Button5
         '
-        Me.Button5.Location = New System.Drawing.Point(773, 50)
+        Me.Button5.Font = New System.Drawing.Font("Times New Roman", 12.0!)
+        Me.Button5.Location = New System.Drawing.Point(1267, 51)
         Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(75, 20)
+        Me.Button5.Size = New System.Drawing.Size(90, 26)
         Me.Button5.TabIndex = 11
         Me.Button5.Text = "OK"
         Me.Button5.UseVisualStyleBackColor = True
@@ -100,7 +94,7 @@ Partial Class Form1
         '
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Times New Roman", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(255, 50)
+        Me.Label3.Location = New System.Drawing.Point(444, 68)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(77, 19)
         Me.Label3.TabIndex = 8
@@ -109,28 +103,29 @@ Partial Class Form1
         'TextBox3
         '
         Me.TextBox3.AutoSize = True
-        Me.TextBox3.Location = New System.Drawing.Point(444, 88)
+        Me.TextBox3.Font = New System.Drawing.Font("Times New Roman", 12.0!)
+        Me.TextBox3.Location = New System.Drawing.Point(645, 116)
         Me.TextBox3.Name = "TextBox3"
-        Me.TextBox3.Size = New System.Drawing.Size(39, 13)
+        Me.TextBox3.Size = New System.Drawing.Size(51, 19)
         Me.TextBox3.TabIndex = 12
         Me.TextBox3.Text = "Label4"
         '
         'TextBox2
         '
-        Me.TextBox2.Location = New System.Drawing.Point(447, 51)
+        Me.TextBox2.Font = New System.Drawing.Font("Times New Roman", 12.0!)
+        Me.TextBox2.Location = New System.Drawing.Point(649, 68)
         Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(293, 20)
+        Me.TextBox2.Size = New System.Drawing.Size(416, 26)
         Me.TextBox2.TabIndex = 13
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1315, 863)
+        Me.ClientSize = New System.Drawing.Size(1791, 863)
         Me.Controls.Add(Me.TextBox2)
         Me.Controls.Add(Me.TextBox3)
         Me.Controls.Add(Me.Button5)
-        Me.Controls.Add(Me.Button4)
         Me.Controls.Add(Me.TreeView1)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label3)
@@ -148,7 +143,6 @@ Partial Class Form1
     Friend WithEvents Label1 As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents TreeView1 As TreeView
-    Friend WithEvents Button4 As Button
     Friend WithEvents Button5 As Button
     Friend WithEvents Label3 As Label
     Friend WithEvents TextBox3 As Label
