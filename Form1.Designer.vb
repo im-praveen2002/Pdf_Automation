@@ -32,7 +32,6 @@ Partial Class Form1
         Me.Label3 = New System.Windows.Forms.Label()
         Me.TextBox3 = New System.Windows.Forms.Label()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'Button2
@@ -123,21 +122,11 @@ Partial Class Form1
         Me.TextBox2.Size = New System.Drawing.Size(293, 20)
         Me.TextBox2.TabIndex = 13
         '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(109, 120)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(92, 23)
-        Me.Button1.TabIndex = 14
-        Me.Button1.Text = "SELECT ALL"
-        Me.Button1.UseVisualStyleBackColor = True
-        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1315, 863)
-        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.TextBox2)
         Me.Controls.Add(Me.TextBox3)
         Me.Controls.Add(Me.Button5)
@@ -164,5 +153,4 @@ Partial Class Form1
     Friend WithEvents Label3 As Label
     Friend WithEvents TextBox3 As Label
     Friend WithEvents TextBox2 As TextBox
-    Friend WithEvents Button1 As Button
 End Class

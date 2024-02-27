@@ -8,15 +8,23 @@ Public Class Form1
     Dim answer As String
     Dim folderpath As New List(Of String)()
     Dim FileName As New List(Of String)
+    Dim newpath As String
 
     'AFTER THE CUSTOMER INPUT BUTTON:
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
 
         Dim customer_input As String = TextBox1.Text
         Dim raw_string As String = $"\\fileserver1\ENGG_PRODUCTION\Current Project\{customer_input}\INPUTS\Customer Input\{TextBox2.Text}"
+        newpath = $"\\fileserver1\ENGG_PRODUCTION\Current Project\{customer_input}\INPUTS\Customer Input"
 
         TextBox3.Text = raw_string
-        PopulateTreeView(TextBox3.Text, TreeView1.Nodes)
+
+
+        Dim topnode As TreeNode = TreeView1.Nodes.Add(TextBox2.Text)
+
+        ' Add child nodes to the parent node
+        'PopulateTreeView(TextBox3.Text, TreeView1.Nodes)
+        PopulateTreeView(TextBox3.Text, topnode.Nodes)
 
     End Sub
 
@@ -24,6 +32,8 @@ Public Class Form1
     'ADDING THE DIRECTORIES TO THE TREE VIEW:
     Private Sub PopulateTreeView(ByVal directory1 As String, ByVal parentNode As TreeNodeCollection)
         Try
+
+            'parentNode.Add(TextBox2.Text)
             ' Get all subdirectories in the current directory
             Dim subDirectories() As String = Directory.GetDirectories(directory1)
 
@@ -74,9 +84,7 @@ Public Class Form1
 
 
         For Each selectedNode As TreeNode In node1
-            'Dim parentname As String = selectedNode.Parent.Text
-            'MessageBox.Show(GetPathToRoot(selectedNode, node1))
-            'MessageBox.Show($"{selectedNode.Parent.Text}/{selectedNode.Text}")
+
             Dim answer As String = ""
             While selectedNode IsNot Nothing
                 answer = answer + selectedNode.Text + "*"
@@ -90,8 +98,8 @@ Public Class Form1
             Dim array1 As String() = result.Split("*")
             Array.Reverse(array1)
             Dim final As String = String.Join("\", array1)
-            folderpath.Add($"{TextBox2.Text}\{final}")
-            'MsgBox($"{TextBox2.Text}\{final}")
+            folderpath.Add($"{newpath}\{final}")
+            MsgBox($"{newpath}\{final}")
             answer = ""
         Next
 
@@ -123,7 +131,7 @@ Public Class Form1
         Loop While Not String.IsNullOrEmpty(osheet.Cells(currentRow, 1).Value)
         skipRow = (currentRow - 1) + 1
 
-        MsgBox(skipRow)
+        'MsgBox(skipRow)
 
         For Each z As String In folderpath
 
@@ -203,43 +211,22 @@ Public Class Form1
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
 
         'TreeView1.SelectedNode = Nothing
-        TreeView1.HideSelection = False
-        Application.DoEvents()
-        'TreeView1.Nodes.Clear()
+        'TreeView1.HideSelection = False
+        'Application.DoEvents()
+
+        TreeView1.Nodes.Clear()
         pdfFiles.Clear()
         node1.Clear()
         answer = ""
         folderpath.Clear()
         FileName.Clear()
-        DeselectAllNodes(TreeView1)
 
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-
         Me.WindowState = FormWindowState.Maximized
 
-    End Sub
-
-    Private Sub DeselectAllNodes(treeView As TreeView)
-        For Each node As TreeNode In treeView.Nodes
-            DeselectNode(node)
-        Next
-    End Sub
-
-    Private Sub DeselectNode(node As TreeNode)
-        If node.IsSelected Then
-            node.TreeView.SelectedNode = Nothing
-            Application.DoEvents()
-            node.BackColor = SystemColors.Window
-            node.ForeColor = SystemColors.WindowText
-            Application.DoEvents()
-        End If
-
-        For Each childNode As TreeNode In node.Nodes
-            DeselectNode(childNode)
-        Next
     End Sub
 
     'KILL THE EXCEL APPLICATION:
