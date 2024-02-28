@@ -14,8 +14,13 @@ Public Class Form1
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
 
         Dim customer_input As String = TextBox1.Text
-        Dim raw_string As String = $"\\fileserver1\ENGG_PRODUCTION\Current Project\{customer_input}\INPUTS\Customer Input\{TextBox2.Text}"
-        newpath = $"\\fileserver1\ENGG_PRODUCTION\Current Project\{customer_input}\INPUTS\Customer Input"
+        'Dim raw_string As String = $"\\fileserver1\ENGG_PRODUCTION\Current Project\{customer_input}\INPUTS\Customer Input\{TextBox2.Text}"
+        Dim raw_string As String = $"\\fileserver1\Temp\Current Project\{customer_input}\INPUTS\Customer Input\{TextBox2.Text}"
+        newpath = $"\\fileserver1\Temp\Current Project\{customer_input}\INPUTS\Customer Input"
+
+        'Dim raw_string As String = $"D:\TESTING\A1\Input\Customer Input\{customer_input}\INPUTS\Customer Input\{TextBox2.Text}"
+        'newpath = $"D:\TESTING\A1\Input\Customer Input\{customer_input}\INPUTS\Customer Input"
+
 
         TextBox3.Text = raw_string
 
@@ -24,6 +29,7 @@ Public Class Form1
 
         ' Add child nodes to the parent node
         'PopulateTreeView(TextBox3.Text, TreeView1.Nodes)
+        CreateFolder()
         PopulateTreeView(TextBox3.Text, topnode.Nodes)
 
     End Sub
@@ -81,7 +87,26 @@ Public Class Form1
     'EXCEL UPDATE BUTTON:
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
 
+        '---------------------
 
+        ' Specify the source and destination paths
+        Dim sourcePath As String = $"{TextBox3.Text}\DSM-Template\XXXXXXBasic Design Data_R0.xlsx"
+        Dim destinationPath As String = $"{TextBox3.Text}\{TextBox2.Text}\XXXXXXBasic Design Data_R0.xlsx"
+
+        Try
+            ' Copy the file from the source to the destination
+            File.Copy(sourcePath, destinationPath, True)
+
+            ' Optionally, you can delete the original file after copying
+            ' File.Delete(sourcePath)
+
+            'MessageBox.Show("Excel file saved to new path successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Catch ex As Exception
+            MessageBox.Show("Error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+
+        '---------------------
+        Application.DoEvents()
 
         For Each selectedNode As TreeNode In node1
 
@@ -109,6 +134,8 @@ Public Class Form1
 
         ' -------------------------------------- CHANGING THE DIRECTORY LOCATION ---------------------------------------------'
 
+        Application.DoEvents()
+
 #Region "EXCEL OPERATION"
 
         Dim oxl As Excel.Application
@@ -118,7 +145,8 @@ Public Class Form1
         oxl.Visible = False
 
         'EXCEL APPLICATION:
-        owb = oxl.Workbooks.Open("C:\Users\19433\Desktop\PROJECT AUTOMATES\XXXXXXBasic Design Data_R0.xlsx")
+        'owb = oxl.Workbooks.Open("C:\Users\19433\Desktop\PROJECT AUTOMATES\XXXXXXBasic Design Data_R0.xlsx")
+        owb = oxl.Workbooks.Open(destinationPath)
         Application.DoEvents()
 
         osheet = CType(owb.Sheets(6), Excel.Worksheet)
@@ -128,10 +156,10 @@ Public Class Form1
 
         Do
 
-            Dim cellValue As String = osheet.Cells(currentRow, 1).Value 'osheet.Cells(ROW,COL).value
+            Dim cellValue As String = osheet.Cells(currentRow, 2).Value 'osheet.Cells(ROW,COL).value
             currentRow += 1
 
-        Loop While Not String.IsNullOrEmpty(osheet.Cells(currentRow, 1).Value)
+        Loop While Not String.IsNullOrEmpty(osheet.Cells(currentRow, 2).Value)
         skipRow = (currentRow - 1) + 1
 
         'MsgBox(skipRow)
@@ -160,13 +188,13 @@ Public Class Form1
                 Application.DoEvents()
                 'SerialNumber:
                 'osheet.Range($"A{i + skipRow }").Value = i + 1
-                osheet.Range($"A{i + skipRow }").Value = i + (skipRow - 1)
+                osheet.Range($"B{i + skipRow }").Value = (i + (skipRow - 1)) - 6
                 Application.DoEvents()
 
                 'FileName:
                 Dim FileNameWithExtension As String = System.IO.Path.GetFileName(pdfFiles(i))
                 Dim FileName As String = FileNameWithExtension.Substring(0, FileNameWithExtension.Length - 4)
-                osheet.Range($"B{i + skipRow }").Value = FileName
+                osheet.Range($"D{i + skipRow }").Value = FileName
                 Application.DoEvents()
 
                 'ModifiedDate:
@@ -200,6 +228,9 @@ Public Class Form1
 
             Next i
         Next z
+
+        owb.Save()
+
 #End Region
 
         oxl.Visible = True
@@ -237,5 +268,28 @@ Public Class Form1
         Next
     End Sub
 
+
+
+    Sub CreateFolder()
+        ' Specify the path of the parent folder
+        Dim parentFolderPath As String = TextBox3.Text
+
+        ' Specify the name of the new folder to be created
+        Dim newFolderName As String = TextBox2.Text
+
+        ' Combine the parent folder path and new folder name to get the full path
+        Dim newFolderPath As String = Path.Combine(parentFolderPath, newFolderName)
+
+        ' Check if the folder already exists
+        If Not Directory.Exists(newFolderPath) Then
+            ' If it doesn't exist, create the folder
+            Directory.CreateDirectory(newFolderPath)
+            MsgBox("Folder created successfully.")
+        Else
+            ' If it already exists, display a message
+            MsgBox("Folder already exists.")
+        End If
+
+    End Sub
 End Class
 
