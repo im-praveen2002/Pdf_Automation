@@ -118,11 +118,12 @@ Public Class Form1
         oxl.Visible = False
 
         'EXCEL APPLICATION:
-        owb = oxl.Workbooks.Open("C:\Users\19433\Desktop\PROJECT AUTOMATES\Output.xlsx")
+        owb = oxl.Workbooks.Open("C:\Users\19433\Desktop\PROJECT AUTOMATES\XXXXXXBasic Design Data_R0.xlsx")
         Application.DoEvents()
 
-        osheet = CType(owb.Sheets(1), Excel.Worksheet)
-        Dim currentRow As Integer = 1
+        osheet = CType(owb.Sheets(6), Excel.Worksheet)
+        'Dim currentRow As Integer = 1
+        Dim currentRow As Integer = 7
         Dim skipRow As Integer
 
         Do
