@@ -87,23 +87,21 @@ Public Class Form1
     'EXCEL UPDATE BUTTON:
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
 
-        '---------------------
 
-        ' Specify the source and destination paths
+#Region "XL COPY"
+        '---------------------
         Dim sourcePath As String = $"{TextBox3.Text}\DSM-Template\XXXXXXBasic Design Data_R0.xlsx"
         Dim destinationPath As String = $"{TextBox3.Text}\{TextBox2.Text}\XXXXXXBasic Design Data_R0.xlsx"
 
         Try
-            ' Copy the file from the source to the destination
+            'COPYING XL SOURCE -> DESTINATION: 
             File.Copy(sourcePath, destinationPath, True)
 
-            ' Optionally, you can delete the original file after copying
-            ' File.Delete(sourcePath)
-
-            'MessageBox.Show("Excel file saved to new path successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
         Catch ex As Exception
             MessageBox.Show("Error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+
+#End Region
 
         '---------------------
         Application.DoEvents()
@@ -129,10 +127,6 @@ Public Class Form1
         Next
 
         MsgBox("WAIT! UNTILL THE EXCEL POPUPS")
-
-        ' -------------------------------------- DIRECTORY LOCATION HARD CODING: ---------------------------------------------'
-
-        ' -------------------------------------- CHANGING THE DIRECTORY LOCATION ---------------------------------------------'
 
         Application.DoEvents()
 
@@ -268,25 +262,20 @@ Public Class Form1
         Next
     End Sub
 
-
-
+    'FOLDER CREATION WITH THE TEXTBOX2:
     Sub CreateFolder()
-        ' Specify the path of the parent folder
-        Dim parentFolderPath As String = TextBox3.Text
 
-        ' Specify the name of the new folder to be created
+        Dim parentFolderPath As String = TextBox3.Text
         Dim newFolderName As String = TextBox2.Text
 
-        ' Combine the parent folder path and new folder name to get the full path
+        'COMBINING THE PATH:
         Dim newFolderPath As String = Path.Combine(parentFolderPath, newFolderName)
 
-        ' Check if the folder already exists
+        'NOT IF PATH ALREADY EXISTS:
         If Not Directory.Exists(newFolderPath) Then
-            ' If it doesn't exist, create the folder
             Directory.CreateDirectory(newFolderPath)
             MsgBox("Folder created successfully.")
         Else
-            ' If it already exists, display a message
             MsgBox("Folder already exists.")
         End If
 
