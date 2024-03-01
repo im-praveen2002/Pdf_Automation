@@ -12,21 +12,9 @@ Public Class Form1
     Dim FileName As New List(Of String)
     Dim newpath As String
 
+    Dim lines As String() = {}
+    Dim filePath As String
 
-
-
-    'READ: LOG FILE :
-    Private Sub Read_Log(Logfile As String)
-
-        Dim lines() As String = File.ReadAllLines(Logfile)
-
-        ' Display the contents of the array (for demonstration purposes)
-        For Each line As String In lines
-            Console.WriteLine(line)
-        Next
-
-
-    End Sub
 
 
 
@@ -113,6 +101,9 @@ Public Class Form1
 
     'EXCEL UPDATE BUTTON:
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+
+
+
         CreateFolder()
 
 
@@ -149,13 +140,8 @@ Public Class Form1
         Dim value As String = parts(parts.Length - 1)
 
 
-        If node1(0).Text = value Then
 
-            folderpath = Directory.GetDirectories(TextBox3.Text).ToList
-
-        Else
-
-            For Each selectedNode As TreeNode In node1
+        For Each selectedNode As TreeNode In node1
 
                 Dim answer As String = ""
                 While selectedNode IsNot Nothing
@@ -174,9 +160,6 @@ Public Class Form1
                 folderpath.Add($"{newpath}\{final}")
                 answer = ""
             Next
-
-
-        End If
 
 
         MsgBox("WAIT! UNTILL THE EXCEL POPUPS")
@@ -225,9 +208,7 @@ Public Class Form1
 
             Dim mainiee As String = z
 
-            Dim Logfile As String = $"{mainiee}/{TextBox2.Text}.text"
-
-            If File.Exists(Logfile) Then
+            If lines.Contains(z) Then
 
                 'MsgBox($"{mainiee} --> REPEATED RECORDS FOUNDED!! ")
                 MessageBox.Show($"{mainiee} --> REPEATED RECORDS FOUNDED!! ", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -275,25 +256,21 @@ Public Class Form1
 
                 Next i
 
-            End If
-
-
 #Region "Log Writing"
 
-            Dim logname As String = $"{z}/{TextBox2.Text}.text"
-
-            If Not (logname.Contains("DSM") Or logname.Contains("Step-1-Output")) Then
-
-                Using writer As New StreamWriter($"{z}/{TextBox2.Text}.text", True)
-                    For Each line As String In Selected_Folder_Path
-                        'writer.WriteLine(line)
-                    Next line
+                Using writer As New StreamWriter(filePath, True)
+                    writer.WriteLine(z)
                 End Using
 
-            End If
+
 
 
 #End Region
+
+            End If
+
+
+
 
         Next z
 
@@ -355,6 +332,29 @@ Public Class Form1
             'MsgBox("Folder created successfully.")
         Else
             'MsgBox("Folder already exists.")
+        End If
+
+
+
+        filePath = $"{parentFolderPath}/{TextBox2.Text}"
+
+        If Not (File.Exists(filePath)) Then
+
+            Using writer As New StreamWriter(filePath, True)
+                writer.Close()
+            End Using
+
+        Else
+
+            lines = File.ReadAllLines(filePath)
+
+            ' Display the contents of the array (for demonstration purposes)
+            For Each line As String In lines
+                Console.WriteLine(line)
+            Next
+
+
+
         End If
 
     End Sub
