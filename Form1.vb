@@ -3,7 +3,7 @@ Imports Microsoft.Office.Interop
 
 Public Class Form1
 
-
+    Dim Selected_Folder_Path As New List(Of String)()
     Dim dateforfolder As DateTime
     Dim node1 As New List(Of TreeNode)
     Dim pdfFiles As New List(Of String)()
@@ -12,11 +12,30 @@ Public Class Form1
     Dim FileName As New List(Of String)
     Dim newpath As String
 
+
+
+
+    'READ: LOG FILE :
+    Private Sub Read_Log(Logfile As String)
+
+        Dim lines() As String = File.ReadAllLines(Logfile)
+
+        ' Display the contents of the array (for demonstration purposes)
+        For Each line As String In lines
+            Console.WriteLine(line)
+        Next
+
+
+    End Sub
+
+
+
     'AFTER THE CUSTOMER INPUT BUTTON:
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
 
         Dim customer_input As String = TextBox1.Text
         'Dim raw_string As String = $"\\fileserver1\ENGG_PRODUCTION\Current Project\{customer_input}\INPUTS\Customer Input\{TextBox2.Text}"
+        'newpath = $"\\fileserver1\ENGG_PRODUCTION\Current Project\{customer_input}\INPUTS\Customer Input"
 
         ' -- FILE SERVER: --
         Dim raw_string As String = $"\\fileserver1\Temp\Current Project\{customer_input}\INPUTS\Customer Input\{TextBox2.Text}"
@@ -35,7 +54,9 @@ Public Class Form1
 
         ' Add child nodes to the parent node
         'PopulateTreeView(TextBox3.Text, TreeView1.Nodes)
-        CreateFolder()
+
+
+        Application.DoEvents()
         PopulateTreeView(TextBox3.Text, topnode.Nodes)
 
     End Sub
@@ -92,6 +113,7 @@ Public Class Form1
 
     'EXCEL UPDATE BUTTON:
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        CreateFolder()
 
 
 #Region "XL COPY"
@@ -114,43 +136,48 @@ Public Class Form1
         End If
 
 
-        ''---------------------
-        'Try
-        '    'COPYING XL SOURCE -> DESTINATION: 
-        '    File.Copy(sourcePath, destinationPath, True)
-
-        'Catch ex As Exception
-        '    MessageBox.Show("Error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        'End Try
-
-        ''---------------
-
 
 #End Region
 
         '---------------------
         Application.DoEvents()
 
-        For Each selectedNode As TreeNode In node1
 
-            Dim answer As String = ""
-            While selectedNode IsNot Nothing
+        Dim inputString As String = TextBox3.Text
 
-                answer = answer + selectedNode.Text + "*"
-                selectedNode = selectedNode.Parent
-            End While
+        Dim parts As String() = inputString.Split("\")
+        Dim value As String = parts(parts.Length - 1)
 
 
+        If node1(0).Text = value Then
 
-            Dim result As String = answer.Substring(0, answer.Length - 1)
-            'MsgBox(result)
-            Dim array1 As String() = result.Split("*")
-            Array.Reverse(array1)
-            Dim final As String = String.Join("\", array1)
-            folderpath.Add($"{newpath}\{final}")
-            'MsgBox($"{newpath}\{final}")
-            answer = ""
-        Next
+            folderpath = Directory.GetDirectories(TextBox3.Text).ToList
+
+        Else
+
+            For Each selectedNode As TreeNode In node1
+
+                Dim answer As String = ""
+                While selectedNode IsNot Nothing
+
+                    answer = answer + selectedNode.Text + "*"
+                    selectedNode = selectedNode.Parent
+                End While
+
+
+
+                Dim result As String = answer.Substring(0, answer.Length - 1)
+                'MsgBox(result)
+                Dim array1 As String() = result.Split("*")
+                Array.Reverse(array1)
+                Dim final As String = String.Join("\", array1)
+                folderpath.Add($"{newpath}\{final}")
+                answer = ""
+            Next
+
+
+        End If
+
 
         MsgBox("WAIT! UNTILL THE EXCEL POPUPS")
 
@@ -162,7 +189,7 @@ Public Class Form1
         Dim owb As Excel.Workbook
         Dim osheet As Excel.Worksheet
         oxl = CreateObject("Excel.Application")
-        oxl.Visible = True
+        oxl.Visible = False
 
         'EXCEL APPLICATION:
         'owb = oxl.Workbooks.Open("C:\Users\19433\Desktop\PROJECT AUTOMATES\XXXXXXBasic Design Data_R0.xlsx")
@@ -196,97 +223,78 @@ Public Class Form1
 
             End If
 
-            'dateforfolder = newpath + z
-            Dim mainFolderPath As String = z
-            Dim mainiee As String = mainFolderPath.Replace("/", "\")
-            If Directory.Exists(mainiee) Then
-                pdfFiles.AddRange(Directory.GetFiles(mainiee, "*.pdf", SearchOption.AllDirectories))
+            Dim mainiee As String = z
+
+            Dim Logfile As String = $"{mainiee}/{TextBox2.Text}.text"
+
+            If File.Exists(Logfile) Then
+
+                'MsgBox($"{mainiee} --> REPEATED RECORDS FOUNDED!! ")
+                MessageBox.Show($"{mainiee} --> REPEATED RECORDS FOUNDED!! ", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+
+                Application.DoEvents()
+                'Exit For
+
+
+            Else
+                If Directory.Exists(mainiee) Then
+                    Selected_Folder_Path.Add(mainiee)
+                    pdfFiles.AddRange(Directory.GetFiles(mainiee, "*.pdf", SearchOption.AllDirectories))
+                End If
+
+
+                ' ---------------------------------------EXCEL VALIDATION FOR NULL VALUES:-----------------------------------------------
+
+
+                'MsgBox(skipRow)
+
+                Application.DoEvents()
+
+                ' ---------------------------------------EXCEL UPDATION WITH RESPECTIVE COLUMNS:-----------------------------------------------
+
+                For i As Integer = 0 To pdfFiles.Count - 1
+
+                    Application.DoEvents()
+
+                    'SNO::
+                    osheet.Range($"B{i + skipRow }").Value = (i + (skipRow - 1)) - 6
+                    Application.DoEvents()
+
+
+                    'FILENAME:
+                    Dim FileNameWithExtension As String = System.IO.Path.GetFileName(pdfFiles(i))
+                    Dim FileName As String = FileNameWithExtension.Substring(0, FileNameWithExtension.Length - 4)
+                    osheet.Range($"D{i + skipRow }").Value = FileName.ToString
+                    Application.DoEvents()
+
+
+                    'DATE:
+                    osheet.Range($"C{i + skipRow }").Value = dateforfolder.ToString("dd-MM-yyyy")
+                    Application.DoEvents()
+
+
+                Next i
+
             End If
 
 
-            ' ---------------------------------------EXCEL VALIDATION FOR NULL VALUES:-----------------------------------------------
+#Region "Log Writing"
+
+            Dim logname As String = $"{z}/{TextBox2.Text}.text"
+
+            If Not (logname.Contains("DSM") Or logname.Contains("Step-1-Output")) Then
+
+                Using writer As New StreamWriter($"{z}/{TextBox2.Text}.text", True)
+                    For Each line As String In Selected_Folder_Path
+                        'writer.WriteLine(line)
+                    Next line
+                End Using
+
+            End If
 
 
-            'MsgBox(skipRow)
+#End Region
 
-            Application.DoEvents()
-
-            ' ---------------------------------------EXCEL UPDATION WITH RESPECTIVE COLUMNS:-----------------------------------------------
-            Dim dateall As String
-
-            For i As Integer = 0 To pdfFiles.Count - 1
-
-                Application.DoEvents()
-                'SerialNumber:
-                'osheet.Range($"A{i + skipRow }").Value = i + 1
-                osheet.Range($"B{i + skipRow }").Value = (i + (skipRow - 1)) - 6
-                Application.DoEvents()
-
-
-
-                'FileName:
-                Dim FileNameWithExtension As String = System.IO.Path.GetFileName(pdfFiles(i))
-                Dim FileName As String = FileNameWithExtension.Substring(0, FileNameWithExtension.Length - 4)
-
-                If InStr(FileName, "SHAHEEN-COM") > 0 Then
-                    'MsgBox("HAI")
-                End If
-
-
-                osheet.Range($"D{i + skipRow }").Value = FileName.ToString
-                osheet.Range($"C{i + skipRow }").Value = dateforfolder.ToString("dd-MM-yyyy")
-                Application.DoEvents()
-
-                'ModifiedDate:
-                'Dim Raw_DateTime As String = IO.File.GetLastWriteTime(pdfFiles(i)).ToString("MM-DD-YYYY")
-                'Dim Raw_DateTime As String = IO.File.GetLastWriteTime(pdfFiles(i)).ToString("dd-MM-yyyy")
-                'osheet.Range($"C{i + skipRow }").Value = Raw_DateTime
-                'Application.DoEvents()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                'MODIFIED DATE:
-                If File.Exists(pdfFiles(i)) Then
-                    ' Create a FileInfo object for the PDF file
-                    Dim fileInfo As New FileInfo(pdfFiles(i))
-
-                    '---------------
-                    Dim folderDirectory As String = Path.GetDirectoryName(pdfFiles(i))
-                    Dim folderInfo As New DirectoryInfo(folderDirectory)
-                    Dim creationDate As DateTime
-
-                    ' Check if the folder exists
-                    If folderInfo.Exists Then
-                        ' Get the creation time of the folder
-                        creationDate = folderInfo.CreationTime
-
-                    End If
-
-                    Dim dateAndTime As String() = creationDate.ToString.Split(" ")
-                    dateall = dateAndTime(0)
-                    'osheet.Range($"C{i + skipRow }").Value = dateforfolder.ToString()
-                    Application.DoEvents()
-                    '--------------
-                End If
-
-                'Description:
-                'Dim File_Description As String = Description(pdfFiles(i)) ' JUMP INTO DESCRIPTION FUNCTION:
-                'osheet.Range($"D{i + skipRow}").Value = File_Description
-                'SHAHEEN-COM
-
-            Next i
         Next z
 
         owb.Save()
@@ -295,6 +303,8 @@ Public Class Form1
 
         oxl.Visible = True
         Me.WindowState = FormWindowState.Maximized
+
+
 
 #Region "RELOADS"
         'Kill_Process()
@@ -305,16 +315,13 @@ Public Class Form1
         folderpath.Clear()
         FileName.Clear()
         newpath = ""
+        Selected_Folder_Path.Clear()
+        'dateforfolder = ""
 #End Region
 
 
     End Sub
 
-    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-        Me.WindowState = FormWindowState.Maximized
-
-    End Sub
 
     'KILL THE EXCEL APPLICATION:
     Sub Kill_Process()
@@ -328,6 +335,12 @@ Public Class Form1
         Next
     End Sub
 
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        Me.WindowState = FormWindowState.Maximized
+
+    End Sub
+
     'FOLDER CREATION WITH THE TEXTBOX2:
     Sub CreateFolder()
 
@@ -337,7 +350,6 @@ Public Class Form1
         'COMBINING THE PATH:
         Dim newFolderPath As String = Path.Combine(parentFolderPath, newFolderName)
 
-        'NOT IF PATH ALREADY EXISTS:
         If Not Directory.Exists(newFolderPath) Then
             Directory.CreateDirectory(newFolderPath)
             'MsgBox("Folder created successfully.")
@@ -346,7 +358,6 @@ Public Class Form1
         End If
 
     End Sub
-
 
 End Class
 
