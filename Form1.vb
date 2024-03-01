@@ -3,6 +3,8 @@ Imports Microsoft.Office.Interop
 
 Public Class Form1
 
+
+    Dim dateforfolder As DateTime
     Dim node1 As New List(Of TreeNode)
     Dim pdfFiles As New List(Of String)()
     Dim answer As String
@@ -15,11 +17,15 @@ Public Class Form1
 
         Dim customer_input As String = TextBox1.Text
         'Dim raw_string As String = $"\\fileserver1\ENGG_PRODUCTION\Current Project\{customer_input}\INPUTS\Customer Input\{TextBox2.Text}"
+
+        ' -- FILE SERVER: --
         Dim raw_string As String = $"\\fileserver1\Temp\Current Project\{customer_input}\INPUTS\Customer Input\{TextBox2.Text}"
         newpath = $"\\fileserver1\Temp\Current Project\{customer_input}\INPUTS\Customer Input"
 
-        'Dim raw_string As String = $"D:\TESTING\A1\Input\Customer Input\{customer_input}\INPUTS\Customer Input\{TextBox2.Text}"
-        'newpath = $"D:\TESTING\A1\Input\Customer Input\{customer_input}\INPUTS\Customer Input"
+
+        ' -- LOCAL DISK: --
+        'Dim raw_string As String = $"D:\Current Project\{customer_input}\INPUTS\Customer Input\{TextBox2.Text}"
+        'newpath = $"D:\Current Project\{customer_input}\INPUTS\Customer Input"
 
 
         TextBox3.Text = raw_string
@@ -90,16 +96,35 @@ Public Class Form1
 
 #Region "XL COPY"
         '---------------------
+        Dim currentDateTime As String = DateTime.Now.ToString("yyyyMMdd_HHmmss")
         Dim sourcePath As String = $"{TextBox3.Text}\DSM-Template\XXXXXXBasic Design Data_R0.xlsx"
-        Dim destinationPath As String = $"{TextBox3.Text}\{TextBox2.Text}\XXXXXXBasic Design Data_R0.xlsx"
+        Dim destinationPath As String = $"{TextBox3.Text}\Step-1-Output\XXXXXXBasic Design Data_R0.xlsx"
+        Dim EXCEL_WRITING As String
 
-        Try
-            'COPYING XL SOURCE -> DESTINATION: 
+        '---------------------
+
+        If File.Exists(destinationPath) Then
+
+            EXCEL_WRITING = destinationPath
+        Else
+
             File.Copy(sourcePath, destinationPath, True)
+            EXCEL_WRITING = destinationPath
 
-        Catch ex As Exception
-            MessageBox.Show("Error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+        End If
+
+
+        ''---------------------
+        'Try
+        '    'COPYING XL SOURCE -> DESTINATION: 
+        '    File.Copy(sourcePath, destinationPath, True)
+
+        'Catch ex As Exception
+        '    MessageBox.Show("Error: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        'End Try
+
+        ''---------------
+
 
 #End Region
 
@@ -110,6 +135,7 @@ Public Class Form1
 
             Dim answer As String = ""
             While selectedNode IsNot Nothing
+
                 answer = answer + selectedNode.Text + "*"
                 selectedNode = selectedNode.Parent
             End While
@@ -136,11 +162,11 @@ Public Class Form1
         Dim owb As Excel.Workbook
         Dim osheet As Excel.Worksheet
         oxl = CreateObject("Excel.Application")
-        oxl.Visible = False
+        oxl.Visible = True
 
         'EXCEL APPLICATION:
         'owb = oxl.Workbooks.Open("C:\Users\19433\Desktop\PROJECT AUTOMATES\XXXXXXBasic Design Data_R0.xlsx")
-        owb = oxl.Workbooks.Open(destinationPath)
+        owb = oxl.Workbooks.Open(EXCEL_WRITING)
         Application.DoEvents()
 
         osheet = CType(owb.Sheets(6), Excel.Worksheet)
@@ -161,6 +187,16 @@ Public Class Form1
         For Each z As String In folderpath
 
 
+            Dim folderInfo1 As New DirectoryInfo(z)
+
+            ' Check if the folder exists
+            If folderInfo1.Exists Then
+                ' Get the creation time of the folder
+                dateforfolder = folderInfo1.CreationTime
+
+            End If
+
+            'dateforfolder = newpath + z
             Dim mainFolderPath As String = z
             Dim mainiee As String = mainFolderPath.Replace("/", "\")
             If Directory.Exists(mainiee) Then
@@ -176,6 +212,7 @@ Public Class Form1
             Application.DoEvents()
 
             ' ---------------------------------------EXCEL UPDATION WITH RESPECTIVE COLUMNS:-----------------------------------------------
+            Dim dateall As String
 
             For i As Integer = 0 To pdfFiles.Count - 1
 
@@ -185,10 +222,19 @@ Public Class Form1
                 osheet.Range($"B{i + skipRow }").Value = (i + (skipRow - 1)) - 6
                 Application.DoEvents()
 
+
+
                 'FileName:
                 Dim FileNameWithExtension As String = System.IO.Path.GetFileName(pdfFiles(i))
                 Dim FileName As String = FileNameWithExtension.Substring(0, FileNameWithExtension.Length - 4)
-                osheet.Range($"D{i + skipRow }").Value = FileName
+
+                If InStr(FileName, "SHAHEEN-COM") > 0 Then
+                    'MsgBox("HAI")
+                End If
+
+
+                osheet.Range($"D{i + skipRow }").Value = FileName.ToString
+                osheet.Range($"C{i + skipRow }").Value = dateforfolder.ToString("dd-MM-yyyy")
                 Application.DoEvents()
 
                 'ModifiedDate:
@@ -198,27 +244,47 @@ Public Class Form1
                 'Application.DoEvents()
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
                 'MODIFIED DATE:
                 If File.Exists(pdfFiles(i)) Then
                     ' Create a FileInfo object for the PDF file
                     Dim fileInfo As New FileInfo(pdfFiles(i))
 
-                    ' Get the last modified date of the file
-                    Dim lastModifiedDate As String = fileInfo.LastWriteTime.ToString()
-                    Dim splited As String() = lastModifiedDate.Split(" ")
+                    '---------------
+                    Dim folderDirectory As String = Path.GetDirectoryName(pdfFiles(i))
+                    Dim folderInfo As New DirectoryInfo(folderDirectory)
+                    Dim creationDate As DateTime
 
+                    ' Check if the folder exists
+                    If folderInfo.Exists Then
+                        ' Get the creation time of the folder
+                        creationDate = folderInfo.CreationTime
 
-                    ' Display the last modified date
-                    osheet.Range($"C{i + skipRow }").Value = splited(0).Trim
+                    End If
+
+                    Dim dateAndTime As String() = creationDate.ToString.Split(" ")
+                    dateall = dateAndTime(0)
+                    'osheet.Range($"C{i + skipRow }").Value = dateforfolder.ToString()
+                    Application.DoEvents()
+                    '--------------
                 End If
-
-
-
 
                 'Description:
                 'Dim File_Description As String = Description(pdfFiles(i)) ' JUMP INTO DESCRIPTION FUNCTION:
                 'osheet.Range($"D{i + skipRow}").Value = File_Description
-
+                'SHAHEEN-COM
 
             Next i
         Next z
@@ -266,7 +332,7 @@ Public Class Form1
     Sub CreateFolder()
 
         Dim parentFolderPath As String = TextBox3.Text
-        Dim newFolderName As String = TextBox2.Text
+        Dim newFolderName As String = "Step-1-Output"
 
         'COMBINING THE PATH:
         Dim newFolderPath As String = Path.Combine(parentFolderPath, newFolderName)
@@ -274,11 +340,13 @@ Public Class Form1
         'NOT IF PATH ALREADY EXISTS:
         If Not Directory.Exists(newFolderPath) Then
             Directory.CreateDirectory(newFolderPath)
-            MsgBox("Folder created successfully.")
+            'MsgBox("Folder created successfully.")
         Else
-            MsgBox("Folder already exists.")
+            'MsgBox("Folder already exists.")
         End If
 
     End Sub
+
+
 End Class
 
