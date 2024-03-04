@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports iText.Layout.Element
 Imports Microsoft.Office.Interop
 
 Public Class Form1
@@ -54,18 +55,13 @@ Public Class Form1
     Private Sub PopulateTreeView(ByVal directory1 As String, ByVal parentNode As TreeNodeCollection)
         Try
 
-            'parentNode.Add(TextBox2.Text)
-            ' Get all subdirectories in the current directory
+
             Dim subDirectories() As String = Directory.GetDirectories(directory1)
 
-            ' Loop through each subdirectory and add it to the TreeView
             For Each subDirectory As String In subDirectories
                 Dim directoryNode As New TreeNode(Path.GetFileName(subDirectory))
 
-                ' Recursively call the PopulateTreeView method for subdirectories
                 PopulateTreeView(subDirectory, directoryNode.Nodes)
-
-                ' Add the directory node to the parent node
                 parentNode.Add(directoryNode)
             Next
         Catch ex As Exception
@@ -77,7 +73,8 @@ Public Class Form1
 
     'MULTI SELECT FUNCTIONALITY IN TREE VIEW:
     Private Sub TreeView1_AfterSelect(sender As Object, e As TreeViewEventArgs) Handles TreeView1.AfterSelect
-        ' Check if the node is already selected
+
+        'Check If the node Is already selected
         If node1.Contains(e.Node) Then
             ' Node is already selected, so deselect it
             Application.DoEvents()
@@ -97,14 +94,19 @@ Public Class Form1
             e.Node.ForeColor = SystemColors.HighlightText
         End If
 
+
+
+
+    End Sub
+    Sub sortedarray()
+
     End Sub
 
     'EXCEL UPDATE BUTTON:
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-
-
-
         CreateFolder()
+        sortedarray()
+
 
 
 #Region "XL COPY"
@@ -143,23 +145,23 @@ Public Class Form1
 
         For Each selectedNode As TreeNode In node1
 
-                Dim answer As String = ""
-                While selectedNode IsNot Nothing
+            Dim answer As String = ""
+            While selectedNode IsNot Nothing
 
-                    answer = answer + selectedNode.Text + "*"
-                    selectedNode = selectedNode.Parent
-                End While
+                answer = answer + selectedNode.Text + "*"
+                selectedNode = selectedNode.Parent
+            End While
 
 
 
-                Dim result As String = answer.Substring(0, answer.Length - 1)
-                'MsgBox(result)
-                Dim array1 As String() = result.Split("*")
-                Array.Reverse(array1)
-                Dim final As String = String.Join("\", array1)
-                folderpath.Add($"{newpath}\{final}")
-                answer = ""
-            Next
+            Dim result As String = answer.Substring(0, answer.Length - 1)
+            'MsgBox(result)
+            Dim array1 As String() = result.Split("*")
+            Array.Reverse(array1)
+            Dim final As String = String.Join("\", array1)
+            folderpath.Add($"{newpath}\{final}")
+            answer = ""
+        Next
 
 
         MsgBox("WAIT! UNTILL THE EXCEL POPUPS")
@@ -175,12 +177,10 @@ Public Class Form1
         oxl.Visible = False
 
         'EXCEL APPLICATION:
-        'owb = oxl.Workbooks.Open("C:\Users\19433\Desktop\PROJECT AUTOMATES\XXXXXXBasic Design Data_R0.xlsx")
         owb = oxl.Workbooks.Open(EXCEL_WRITING)
         Application.DoEvents()
 
         osheet = CType(owb.Sheets(6), Excel.Worksheet)
-        'Dim currentRow As Integer = 1
         Dim currentRow As Integer = 7
         Dim skipRow As Integer
 
@@ -193,6 +193,14 @@ Public Class Form1
         skipRow = (currentRow - 1) + 1
 
         'MsgBox(skipRow)
+
+
+        If node1(0).Text = value Then
+
+            folderpath = Directory.GetDirectories(TextBox3.Text).ToList
+
+        End If
+
 
         For Each z As String In folderpath
 
@@ -212,7 +220,6 @@ Public Class Form1
 
                 'MsgBox($"{mainiee} --> REPEATED RECORDS FOUNDED!! ")
                 MessageBox.Show($"{mainiee} --> REPEATED RECORDS FOUNDED!! ", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-
                 Application.DoEvents()
                 'Exit For
 
@@ -222,59 +229,57 @@ Public Class Form1
                     Selected_Folder_Path.Add(mainiee)
                     pdfFiles.AddRange(Directory.GetFiles(mainiee, "*.pdf", SearchOption.AllDirectories))
                 End If
-
-
-                ' ---------------------------------------EXCEL VALIDATION FOR NULL VALUES:-----------------------------------------------
-
-
-                'MsgBox(skipRow)
-
-                Application.DoEvents()
-
-                ' ---------------------------------------EXCEL UPDATION WITH RESPECTIVE COLUMNS:-----------------------------------------------
-
-                For i As Integer = 0 To pdfFiles.Count - 1
-
-                    Application.DoEvents()
-
-                    'SNO::
-                    osheet.Range($"B{i + skipRow }").Value = (i + (skipRow - 1)) - 6
-                    Application.DoEvents()
-
-
-                    'FILENAME:
-                    Dim FileNameWithExtension As String = System.IO.Path.GetFileName(pdfFiles(i))
-                    Dim FileName As String = FileNameWithExtension.Substring(0, FileNameWithExtension.Length - 4)
-                    osheet.Range($"D{i + skipRow }").Value = FileName.ToString
-                    Application.DoEvents()
-
-
-                    'DATE:
-                    osheet.Range($"C{i + skipRow }").Value = dateforfolder.ToString("dd-MM-yyyy")
-                    Application.DoEvents()
-
-
-                Next i
-
-#Region "Log Writing"
-
-                Using writer As New StreamWriter(filePath, True)
-                    writer.WriteLine(z)
-                End Using
-
-
-
-
-#End Region
-
             End If
 
 
 
 
-        Next z
 
+            ' ---------------------------------------EXCEL VALIDATION FOR NULL VALUES:-----------------------------------------------
+
+
+            'MsgBox(skipRow)
+
+            Application.DoEvents()
+
+            ' ---------------------------------------EXCEL UPDATION WITH RESPECTIVE COLUMNS:-----------------------------------------------
+
+            For i As Integer = 0 To pdfFiles.Count - 1
+                Application.DoEvents()
+
+                'SNO::
+                osheet.Range($"B{i + skipRow }").Value = (i + (skipRow - 1)) - 6
+                Application.DoEvents()
+
+
+                'FILENAME:
+                Dim FileNameWithExtension As String = System.IO.Path.GetFileName(pdfFiles(i))
+                Dim FileName As String = FileNameWithExtension.Substring(0, FileNameWithExtension.Length - 4)
+                osheet.Range($"D{i + skipRow }").Value = FileName.ToString
+                Application.DoEvents()
+
+
+                'DATE:
+                osheet.Range($"C{i + skipRow }").Value = dateforfolder.ToString("dd-MM-yyyy")
+                Application.DoEvents()
+            Next i
+
+
+#Region "Log Writing"
+
+            Using writer As New StreamWriter(filePath, True)
+
+                If Not (z.Contains("DSM") OrElse z.Contains("Step")) And Not (lines.Contains(z)) Then
+
+                    writer.WriteLine(z)
+                End If
+            End Using
+
+
+#End Region
+        Next z
         owb.Save()
+
 
 #End Region
 
@@ -335,9 +340,8 @@ Public Class Form1
         End If
 
 
-
+        'FILE NOT PRESENT CREATE || READ THE FILE CONTENTS:
         filePath = $"{parentFolderPath}/{TextBox2.Text}"
-
         If Not (File.Exists(filePath)) Then
 
             Using writer As New StreamWriter(filePath, True)
@@ -347,13 +351,6 @@ Public Class Form1
         Else
 
             lines = File.ReadAllLines(filePath)
-
-            ' Display the contents of the array (for demonstration purposes)
-            For Each line As String In lines
-                Console.WriteLine(line)
-            Next
-
-
 
         End If
 
