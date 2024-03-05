@@ -87,8 +87,8 @@ Public Class Form1
             Application.DoEvents()
 
 
+            ' SELECT THE NEWNODE:
         Else
-            ' Node is not selected, so select it
             node1.Add(e.Node)
             e.Node.BackColor = SystemColors.Highlight
             e.Node.ForeColor = SystemColors.HighlightText
@@ -194,12 +194,14 @@ Public Class Form1
 
         'MsgBox(skipRow)
 
-
         If node1(0).Text = value Then
+
 
             folderpath = Directory.GetDirectories(TextBox3.Text).ToList
 
         End If
+
+
 
 
         For Each z As String In folderpath

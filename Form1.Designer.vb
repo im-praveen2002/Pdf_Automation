@@ -121,9 +121,9 @@ Partial Class Form1
         '
         'ProgressBar1
         '
-        Me.ProgressBar1.Location = New System.Drawing.Point(781, 125)
+        Me.ProgressBar1.Location = New System.Drawing.Point(1219, 83)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(720, 23)
+        Me.ProgressBar1.Size = New System.Drawing.Size(175, 23)
         Me.ProgressBar1.TabIndex = 14
         '
         'Form1
