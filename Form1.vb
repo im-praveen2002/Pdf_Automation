@@ -18,7 +18,21 @@ Public Class Form1
 
 
 
+    Public Function Checknode(value As String)
 
+
+        For Each i As TreeNode In node1
+
+            If i.ToString.EndsWith(value) Then
+                Return True
+            End If
+
+        Next
+
+        Return False
+
+
+    End Function
     'AFTER THE CUSTOMER INPUT BUTTON:
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
 
@@ -193,11 +207,17 @@ Public Class Form1
         skipRow = (currentRow - 1) + 1
 
         'MsgBox(skipRow)
+        'myList.IndexOf(elementToCheck) <> -1 
 
-        If node1(0).Text = value Then
-
+        If Checknode(value) And node1.Count = 1 Then
 
             folderpath = Directory.GetDirectories(TextBox3.Text).ToList
+
+        ElseIf Checknode(value) And node1.Count > 1 Then
+
+            MsgBox("SELECTED ALL AND CHILD FOLDER TOO!!")
+            folderpath = Directory.GetDirectories(TextBox3.Text).ToList
+
 
         End If
 
