@@ -215,8 +215,8 @@ Public Class Form1
 
         ElseIf Checknode(value) And node1.Count > 1 Then
 
-            MsgBox("SELECTED ALL AND CHILD FOLDER TOO!!")
-            folderpath = Directory.GetDirectories(TextBox3.Text).ToList
+            ShowYesNoMessage()
+
 
 
         End If
@@ -377,6 +377,31 @@ Public Class Form1
         End If
 
     End Sub
+
+
+    Private Sub ShowYesNoMessage()
+        ' Display a MessageBox with Yes and No buttons
+        Dim result As DialogResult = MessageBox.Show("You Meant Select All?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+
+        ' Check the user's choice
+        If result = DialogResult.Yes Then
+            folderpath = Directory.GetDirectories(TextBox3.Text).ToList
+        Else
+            TreeView1.Nodes.Clear()
+            pdfFiles.Clear()
+            node1.Clear()
+            answer = ""
+            folderpath.Clear()
+            FileName.Clear()
+            newpath = ""
+            Selected_Folder_Path.Clear()
+
+            Button5.PerformClick()
+
+
+        End If
+    End Sub
+
 
 End Class
 
