@@ -32,6 +32,7 @@ Partial Class Form1
         Me.TextBox3 = New System.Windows.Forms.Label()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'Button2
@@ -126,6 +127,16 @@ Partial Class Form1
         Me.ProgressBar1.Size = New System.Drawing.Size(175, 23)
         Me.ProgressBar1.TabIndex = 14
         '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Times New Roman", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Location = New System.Drawing.Point(818, 716)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(113, 19)
+        Me.Label4.TabIndex = 8
+        Me.Label4.Text = ". . . . . . . . . . . . . "
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -138,6 +149,7 @@ Partial Class Form1
         Me.Controls.Add(Me.TreeView1)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label3)
+        Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.Button2)
@@ -157,4 +169,5 @@ Partial Class Form1
     Friend WithEvents TextBox3 As Label
     Friend WithEvents TextBox2 As TextBox
     Friend WithEvents ProgressBar1 As ProgressBar
+    Friend WithEvents Label4 As Label
 End Class

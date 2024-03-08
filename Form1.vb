@@ -12,6 +12,7 @@ Public Class Form1
     Dim folderpath As New List(Of String)()
     Dim FileName As New List(Of String)
     Dim newpath As String
+    Dim ShowExcel As Boolean = True
 
     Dim lines As String() = {}
     Dim filePath As String
@@ -178,7 +179,8 @@ Public Class Form1
         Next
 
 
-        MsgBox("WAIT! UNTILL THE EXCEL POPUPS")
+        'MsgBox("WAIT! UNTILL THE EXCEL POPUPS")
+        Label4.Text = "WAIT! Untill The XL Pop Ups"
 
         Application.DoEvents()
 
@@ -291,7 +293,7 @@ Public Class Form1
 
             Using writer As New StreamWriter(filePath, True)
 
-                If Not (z.Contains("DSM") OrElse z.Contains("Step")) And Not (lines.Contains(z)) Then
+                If (Not (z.Contains("DSM") Or z.Contains("Step"))) And Not (lines.Contains(z)) Then
 
                     writer.WriteLine(z)
                 End If
@@ -305,7 +307,11 @@ Public Class Form1
 
 #End Region
 
-        oxl.Visible = True
+        If ShowExcel Then
+            oxl.Visible = True
+        End If
+
+
         Me.WindowState = FormWindowState.Maximized
 
 
@@ -321,6 +327,7 @@ Public Class Form1
         newpath = ""
         Selected_Folder_Path.Clear()
         'dateforfolder = ""
+        ShowExcel = True
 #End Region
 
 
@@ -342,6 +349,7 @@ Public Class Form1
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         Me.WindowState = FormWindowState.Maximized
+        Label4.Text = ""
 
     End Sub
 
@@ -363,7 +371,7 @@ Public Class Form1
 
 
         'FILE NOT PRESENT CREATE || READ THE FILE CONTENTS:
-        filePath = $"{parentFolderPath}/{TextBox2.Text}"
+        filePath = $"{parentFolderPath}/{TextBox2.Text}-LOG.txt"
         If Not (File.Exists(filePath)) Then
 
             Using writer As New StreamWriter(filePath, True)
@@ -381,12 +389,13 @@ Public Class Form1
 
     Private Sub ShowYesNoMessage()
         ' Display a MessageBox with Yes and No buttons
-        Dim result As DialogResult = MessageBox.Show("You Meant Select All?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+        Dim result As DialogResult = MessageBox.Show("SELECT ALL - YES, RESET - NO ?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
 
         ' Check the user's choice
         If result = DialogResult.Yes Then
             folderpath = Directory.GetDirectories(TextBox3.Text).ToList
         Else
+            ShowExcel = False
             TreeView1.Nodes.Clear()
             pdfFiles.Clear()
             node1.Clear()
