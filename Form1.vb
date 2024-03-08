@@ -184,17 +184,9 @@ Public Class Form1
         owb = oxl.Workbooks.Open(EXCEL_WRITING)
         Application.DoEvents()
 
-        osheet = CType(owb.Sheets(6), Excel.Worksheet)
-        Dim currentRow As Integer = 8
-        Dim skipRow As Integer
 
-        Do
 
-            Dim cellValue As String = osheet.Cells(currentRow, 2).Value 'osheet.Cells(ROW,COL).value
-            currentRow += 1
 
-        Loop While Not String.IsNullOrEmpty(osheet.Cells(currentRow, 2).Value)
-        skipRow = (currentRow - 1) + 1
 
 
         'MsgBox(skipRow)
@@ -216,6 +208,28 @@ Public Class Form1
 
 
         For Each z As String In folderpath
+
+
+            osheet = CType(owb.Sheets(6), Excel.Worksheet)
+            Dim currentRow As Integer = 7
+            Dim skipRow As Integer
+            Dim sno As Integer
+
+            Do
+
+                Dim cellValue As String = osheet.Cells(currentRow, 2).Value 'osheet.Cells(ROW,COL).value
+                currentRow += 1
+
+            Loop While Not (String.IsNullOrEmpty(osheet.Cells(currentRow, 2).Value) And String.IsNullOrEmpty(osheet.Cells(currentRow + 1, 2).Value))
+
+            If currentRow = 8 Then
+                skipRow = (currentRow - 1) + 1
+                sno = 1
+            Else
+                skipRow = (currentRow - 1) + 2
+                sno = CInt(osheet.Cells((currentRow - 1), 2).Value.ToString)
+                sno += 1
+            End If
 
 
             Dim folderInfo1 As New DirectoryInfo(z)
@@ -258,10 +272,13 @@ Public Class Form1
             ' ---------------------------------------EXCEL UPDATION WITH RESPECTIVE COLUMNS:-----------------------------------------------
 
             For i As Integer = 0 To pdfFiles.Count - 1
+
+
                 Application.DoEvents()
 
-                'SNO::
-                osheet.Range($"B{i + skipRow }").Value = (i + (skipRow - 1)) - 6
+
+                'SNO::sno
+                osheet.Range($"B{i + skipRow }").Value = sno + i
                 Application.DoEvents()
 
 
@@ -291,6 +308,7 @@ Public Class Form1
 
 
 #End Region
+            pdfFiles.Clear()
         Next z
 
         owb.Save()
