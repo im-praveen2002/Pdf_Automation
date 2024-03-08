@@ -19,22 +19,7 @@ Public Class Form1
 
 
 
-    Public Function Checknode(value As String)
-
-
-        For Each i As TreeNode In node1
-
-            If i.ToString.EndsWith(value) Then
-                Return True
-            End If
-
-        Next
-
-        Return False
-
-
-    End Function
-    'AFTER THE CUSTOMER INPUT BUTTON:
+    'BUTTON : OK  --> TREE VIEW:
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
 
         Dim customer_input As String = TextBox1.Text
@@ -66,7 +51,7 @@ Public Class Form1
     End Sub
 
 
-    'ADDING THE DIRECTORIES TO THE TREE VIEW:
+    'SHOW TREE VIEW:
     Private Sub PopulateTreeView(ByVal directory1 As String, ByVal parentNode As TreeNodeCollection)
         Try
 
@@ -86,7 +71,7 @@ Public Class Form1
     End Sub
 
 
-    'MULTI SELECT FUNCTIONALITY IN TREE VIEW:
+    'MULTI - TREE VIEW:
     Private Sub TreeView1_AfterSelect(sender As Object, e As TreeViewEventArgs) Handles TreeView1.AfterSelect
 
         'Check If the node Is already selected
@@ -113,25 +98,28 @@ Public Class Form1
 
 
     End Sub
-    Sub sortedarray()
 
-    End Sub
 
-    'EXCEL UPDATE BUTTON:
+    'BUTTON : EXCEL UPDATE
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         CreateFolder()
-        sortedarray()
-
 
 
 #Region "XL COPY"
         '---------------------
-        Dim currentDateTime As String = DateTime.Now.ToString("yyyyMMdd_HHmmss")
-        Dim sourcePath As String = $"{TextBox3.Text}\DSM-Template\XXXXXXBasic Design Data_R0.xlsx"
-        Dim destinationPath As String = $"{TextBox3.Text}\Step-1-Output\XXXXXXBasic Design Data_R0.xlsx"
+        'Dim currentDateTime As String = DateTime.Now.ToString("yyyyMMdd_HHmmss")
+
+        Dim Folder As String = $"{TextBox3.Text}\DSM-Template"
+        Dim excelFiles As String() = Directory.GetFiles(Folder, "*.xlsx")
+        Dim excelfilename As String() = excelFiles(0).Split("\")
+
+
+        'Dim sourcePath As String = $"{TextBox3.Text}\DSM-Template\XXXXXXBasic Design Data_R0.xlsx"
+        Dim sourcePath As String = $"{TextBox3.Text}\DSM-Template\{excelfilename(excelfilename.Length - 1)}"
+        Dim destinationPath As String = $"{TextBox3.Text}\Step-1-Output\{excelfilename(excelfilename.Length - 1)}"
         Dim EXCEL_WRITING As String
 
-        '---------------------
+
 
         If File.Exists(destinationPath) Then
 
@@ -153,11 +141,11 @@ Public Class Form1
 
         Dim inputString As String = TextBox3.Text
 
-        Dim parts As String() = inputString.Split("\")
-        Dim value As String = parts(parts.Length - 1)
+        Dim parts As String() = inputString.Split("\") 'FOLDERS
+        Dim value As String = parts(parts.Length - 1) ' TASK FOLDER
 
 
-
+        'PATH SELECTED NODE --> FOLDER PATH
         For Each selectedNode As TreeNode In node1
 
             Dim answer As String = ""
@@ -197,7 +185,7 @@ Public Class Form1
         Application.DoEvents()
 
         osheet = CType(owb.Sheets(6), Excel.Worksheet)
-        Dim currentRow As Integer = 7
+        Dim currentRow As Integer = 8
         Dim skipRow As Integer
 
         Do
@@ -207,6 +195,7 @@ Public Class Form1
 
         Loop While Not String.IsNullOrEmpty(osheet.Cells(currentRow, 2).Value)
         skipRow = (currentRow - 1) + 1
+
 
         'MsgBox(skipRow)
         'myList.IndexOf(elementToCheck) <> -1 
@@ -289,6 +278,7 @@ Public Class Form1
             Next i
 
 
+
 #Region "Log Writing"
 
             Using writer As New StreamWriter(filePath, True)
@@ -302,6 +292,7 @@ Public Class Form1
 
 #End Region
         Next z
+
         owb.Save()
 
 
@@ -313,8 +304,6 @@ Public Class Form1
 
 
         Me.WindowState = FormWindowState.Maximized
-
-
 
 #Region "RELOADS"
         'Kill_Process()
@@ -332,6 +321,75 @@ Public Class Form1
 
 
     End Sub
+
+
+    'ALL OR RESET:
+    Private Sub ShowYesNoMessage()
+        ' Display a MessageBox with Yes and No buttons
+        Dim result As DialogResult = MessageBox.Show("SELECT ALL - YES, RESET - NO ?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+
+        ' Check the user's choice
+        If result = DialogResult.Yes Then
+            folderpath = Directory.GetDirectories(TextBox3.Text).ToList
+        Else
+            ShowExcel = False
+            TreeView1.Nodes.Clear()
+            pdfFiles.Clear()
+            node1.Clear()
+            answer = ""
+            folderpath.Clear()
+            FileName.Clear()
+            newpath = ""
+            Selected_Folder_Path.Clear()
+
+            Button5.PerformClick()
+
+
+        End If
+    End Sub
+
+
+
+
+
+    Public Function Checknode(value As String)
+
+
+        For Each i As TreeNode In node1
+
+            If i.ToString.EndsWith(value) Then
+                Return True
+            End If
+
+        Next
+
+        Return False
+
+
+    End Function
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     'KILL THE EXCEL APPLICATION:
@@ -352,6 +410,9 @@ Public Class Form1
         Label4.Text = ""
 
     End Sub
+
+
+
 
     'FOLDER CREATION WITH THE TEXTBOX2:
     Sub CreateFolder()
@@ -387,29 +448,6 @@ Public Class Form1
     End Sub
 
 
-    Private Sub ShowYesNoMessage()
-        ' Display a MessageBox with Yes and No buttons
-        Dim result As DialogResult = MessageBox.Show("SELECT ALL - YES, RESET - NO ?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-
-        ' Check the user's choice
-        If result = DialogResult.Yes Then
-            folderpath = Directory.GetDirectories(TextBox3.Text).ToList
-        Else
-            ShowExcel = False
-            TreeView1.Nodes.Clear()
-            pdfFiles.Clear()
-            node1.Clear()
-            answer = ""
-            folderpath.Clear()
-            FileName.Clear()
-            newpath = ""
-            Selected_Folder_Path.Clear()
-
-            Button5.PerformClick()
-
-
-        End If
-    End Sub
 
 
 End Class
