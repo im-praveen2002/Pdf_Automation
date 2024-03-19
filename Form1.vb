@@ -18,6 +18,13 @@ Public Class Form1
     Dim filePath As String
 
 
+    Dim oxl As Excel.Application
+    Dim owb As Excel.Workbook
+    Dim osheet As Excel.Worksheet
+    Dim YESORNOT As Boolean
+
+
+
 
     'BUTTON : OK  --> TREE VIEW:
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
@@ -37,7 +44,7 @@ Public Class Form1
 
 
         TextBox3.Text = raw_string
-
+        Application.DoEvents()
 
         Dim topnode As TreeNode = TreeView1.Nodes.Add(TextBox2.Text)
 
@@ -102,8 +109,17 @@ Public Class Form1
 
     'BUTTON : EXCEL UPDATE
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        ProgressBar1.Visible = True
+        Application.DoEvents()
+        Label6.Visible = True
+        Application.DoEvents()
+        Label6.Text = "LOADING"
+        ProgressBar1.Value = 15
         CreateFolder()
+        YESORNOT = True
 
+        oxl = CreateObject("Excel.Application")
+        oxl.Visible = False
 
 #Region "XL COPY"
         '---------------------
@@ -131,7 +147,7 @@ Public Class Form1
 
         End If
 
-
+        ProgressBar1.Value = 30
 
 #End Region
 
@@ -168,174 +184,190 @@ Public Class Form1
 
 
         'MsgBox("WAIT! UNTILL THE EXCEL POPUPS")
-        Label4.Text = "WAIT! Untill The XL Pop Ups"
+        Label4.Text = "VALIDATING THE SELECTED FOLDER IN THE VIEWS"
 
         Application.DoEvents()
 
+        ProgressBar1.Value = 50
 #Region "EXCEL OPERATION"
 
-        Dim oxl As Excel.Application
-        Dim owb As Excel.Workbook
-        Dim osheet As Excel.Worksheet
-        oxl = CreateObject("Excel.Application")
-        oxl.Visible = False
 
         'EXCEL APPLICATION:
-        owb = oxl.Workbooks.Open(EXCEL_WRITING)
+
+        owb = oxl.Workbooks.Open(EXCEL_WRITING, ReadOnly:=False, IgnoreReadOnlyRecommended:=True, Editable:=True)
         Application.DoEvents()
 
+        If owb IsNot Nothing Then
+
+            If Checknode(value) And node1.Count = 1 Then
+
+                folderpath = Directory.GetDirectories(TextBox3.Text).ToList
+
+            ElseIf Checknode(value) And node1.Count > 1 Then
+
+                ShowYesNoMessage()
 
 
 
-
-
-        'MsgBox(skipRow)
-        'myList.IndexOf(elementToCheck) <> -1 
-
-        If Checknode(value) And node1.Count = 1 Then
-
-            folderpath = Directory.GetDirectories(TextBox3.Text).ToList
-
-        ElseIf Checknode(value) And node1.Count > 1 Then
-
-            ShowYesNoMessage()
-
-
-
-        End If
-
-
-
-
-        For Each z As String In folderpath
-
-
-            osheet = CType(owb.Sheets(6), Excel.Worksheet)
-            Dim currentRow As Integer = 7
-            Dim skipRow As Integer
-            Dim sno As Integer
-
-            Do
-
-                Dim cellValue As String = osheet.Cells(currentRow, 2).Value 'osheet.Cells(ROW,COL).value
-                currentRow += 1
-
-            Loop While Not (String.IsNullOrEmpty(osheet.Cells(currentRow, 2).Value) And String.IsNullOrEmpty(osheet.Cells(currentRow + 1, 2).Value))
-
-            If currentRow = 8 Then
-                skipRow = (currentRow - 1) + 1
-                sno = 1
-            Else
-                skipRow = (currentRow - 1) + 2
-                sno = CInt(osheet.Cells((currentRow - 1), 2).Value.ToString)
-                sno += 1
             End If
 
 
-            Dim folderInfo1 As New DirectoryInfo(z)
-
-            ' Check if the folder exists
-            If folderInfo1.Exists Then
-                ' Get the creation time of the folder
-                dateforfolder = folderInfo1.CreationTime
-
-            End If
-
-            Dim mainiee As String = z
-
-            If lines.Contains(z) Then
-
-                'MsgBox($"{mainiee} --> REPEATED RECORDS FOUNDED!! ")
-                MessageBox.Show($"{mainiee} --> REPEATED RECORDS FOUNDED!! ", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Application.DoEvents()
-                'Exit For
 
 
-            Else
-                If Directory.Exists(mainiee) Then
-                    Selected_Folder_Path.Add(mainiee)
-                    pdfFiles.AddRange(Directory.GetFiles(mainiee, "*.pdf", SearchOption.AllDirectories))
+            For Each z As String In folderpath
+
+
+                ProgressBar1.Value = 70
+                osheet = CType(owb.Sheets(6), Excel.Worksheet)
+                Dim currentRow As Integer = 7
+                Dim skipRow As Integer
+                Dim sno As Integer
+
+                Do
+
+                    Dim cellValue As String = osheet.Cells(currentRow, 2).Value 'osheet.Cells(ROW,COL).value
+                    currentRow += 1
+
+                Loop While Not (String.IsNullOrEmpty(osheet.Cells(currentRow, 2).Value) And String.IsNullOrEmpty(osheet.Cells(currentRow + 1, 2).Value))
+
+                If currentRow = 8 Then
+                    skipRow = (currentRow - 1) + 1
+                    sno = 1
+                Else
+                    skipRow = (currentRow - 1) + 2
+                    sno = CInt(osheet.Cells((currentRow - 1), 2).Value.ToString)
+                    sno += 1
                 End If
-            End If
 
 
+                Dim folderInfo1 As New DirectoryInfo(z)
+
+                ' Check if the folder exists
+                If folderInfo1.Exists Then
+                    ' Get the creation time of the folder
+                    dateforfolder = folderInfo1.CreationTime
+
+                End If
+
+                Dim mainiee As String = z
+
+                If lines.Contains(z) Then
+
+                    'MsgBox($"{mainiee} --> REPEATED RECORDS FOUNDED!! ")
+                    MessageBox.Show($"{mainiee} --> REPEATED RECORDS FOUNDED!! ", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    Application.DoEvents()
+                    'Exit For
 
 
+                Else
+                    If Directory.Exists(mainiee) Then
+                        Selected_Folder_Path.Add(mainiee)
+                        pdfFiles.AddRange(Directory.GetFiles(mainiee, "*.pdf", SearchOption.AllDirectories))
+                    End If
+                End If
 
-            ' ---------------------------------------EXCEL VALIDATION FOR NULL VALUES:-----------------------------------------------
+
+                Label4.Text = "WAIT! Untill The XL Pop Ups"
 
 
-            'MsgBox(skipRow)
+                ' ---------------------------------------EXCEL VALIDATION FOR NULL VALUES:-----------------------------------------------
 
-            Application.DoEvents()
 
-            ' ---------------------------------------EXCEL UPDATION WITH RESPECTIVE COLUMNS:-----------------------------------------------
-
-            For i As Integer = 0 To pdfFiles.Count - 1
-
+                'MsgBox(skipRow)
 
                 Application.DoEvents()
 
+                ' ---------------------------------------EXCEL UPDATION WITH RESPECTIVE COLUMNS:-----------------------------------------------
+                ProgressBar1.Value = 80
 
-                'SNO::sno
-                osheet.Range($"B{i + skipRow }").Value = sno + i
-                Application.DoEvents()
-
-
-                'FILENAME:
-                Dim FileNameWithExtension As String = System.IO.Path.GetFileName(pdfFiles(i))
-                Dim FileName As String = FileNameWithExtension.Substring(0, FileNameWithExtension.Length - 4)
-                osheet.Range($"D{i + skipRow }").Value = FileName.ToString
-                Application.DoEvents()
+                For i As Integer = 0 To pdfFiles.Count - 1
 
 
-                'DATE:
-                osheet.Range($"C{i + skipRow }").Value = dateforfolder.ToString("dd-MM-yyyy")
-                Application.DoEvents()
-            Next i
+                    Application.DoEvents()
+
+
+                    'SNO::sno
+                    osheet.Range($"B{i + skipRow }").Value = sno + i
+                    Application.DoEvents()
+
+
+                    'FILENAME:
+                    Dim FileNameWithExtension As String = System.IO.Path.GetFileName(pdfFiles(i))
+                    Dim FileName As String = FileNameWithExtension.Substring(0, FileNameWithExtension.Length - 4)
+                    osheet.Range($"D{i + skipRow }").Value = FileName.ToString
+                    Application.DoEvents()
+
+
+                    'DATE:
+                    osheet.Range($"C{i + skipRow }").Value = dateforfolder.ToString("dd-MM-yyyy")
+                    Application.DoEvents()
+                Next i
 
 
 
 #Region "Log Writing"
 
-            Using writer As New StreamWriter(filePath, True)
+                Using writer As New StreamWriter(filePath, True)
 
-                If (Not (z.Contains("DSM") Or z.Contains("Step"))) And Not (lines.Contains(z)) Then
+                    If (Not (z.Contains("DSM") Or z.Contains("Step"))) And Not (lines.Contains(z)) Then
 
-                    writer.WriteLine(z)
-                End If
-            End Using
+                        writer.WriteLine(z)
+                    End If
+                End Using
 
 
 #End Region
+                pdfFiles.Clear()
+            Next z
+
+            ProgressBar1.Value = 100
+
+            If YESORNOT Then
+                owb.Save()
+            End If
+
+            Application.DoEvents()
+
+
+#End Region
+
+            If ShowExcel Then
+                oxl.Visible = True
+            End If
+
+
+            Me.WindowState = FormWindowState.Maximized
+
+#Region "RELOADS"
+            'Kill_Process()
+            TreeView1.Nodes.Clear()
             pdfFiles.Clear()
-        Next z
-
-        owb.Save()
-
-
+            node1.Clear()
+            answer = ""
+            folderpath.Clear()
+            FileName.Clear()
+            newpath = ""
+            Selected_Folder_Path.Clear()
+            'dateforfolder = ""
+            ShowExcel = True
+            ProgressBar1.Visible = False
 #End Region
 
-        If ShowExcel Then
-            oxl.Visible = True
+        Else
+
+
+
+
+
+
+
         End If
 
 
-        Me.WindowState = FormWindowState.Maximized
+        'MsgBox(skipRow)
+        'myList.IndexOf(elementToCheck) <> -1 
 
-#Region "RELOADS"
-        'Kill_Process()
-        TreeView1.Nodes.Clear()
-        pdfFiles.Clear()
-        node1.Clear()
-        answer = ""
-        folderpath.Clear()
-        FileName.Clear()
-        newpath = ""
-        Selected_Folder_Path.Clear()
-        'dateforfolder = ""
-        ShowExcel = True
-#End Region
+
 
 
     End Sub
@@ -349,6 +381,7 @@ Public Class Form1
         ' Check the user's choice
         If result = DialogResult.Yes Then
             folderpath = Directory.GetDirectories(TextBox3.Text).ToList
+            YESORNOT = True
         Else
             ShowExcel = False
             TreeView1.Nodes.Clear()
@@ -359,8 +392,11 @@ Public Class Form1
             FileName.Clear()
             newpath = ""
             Selected_Folder_Path.Clear()
-
+            owb.Close()
             Button5.PerformClick()
+            Kill_Process()
+            YESORNOT = False
+            Label6.Visible = False
 
 
         End If
@@ -385,27 +421,6 @@ Public Class Form1
 
 
     End Function
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -465,8 +480,8 @@ Public Class Form1
 
     End Sub
 
+    Private Sub Label5_Click(sender As Object, e As EventArgs)
 
-
-
+    End Sub
 End Class
 
