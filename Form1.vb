@@ -1,5 +1,4 @@
 ﻿Imports System.IO
-Imports iText.Layout.Element
 Imports Microsoft.Office.Interop
 
 Public Class Form1
@@ -30,27 +29,15 @@ Public Class Form1
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
 
         Dim customer_input As String = TextBox1.Text
-        'Dim raw_string As String = $"\\fileserver1\ENGG_PRODUCTION\Current Project\{customer_input}\INPUTS\Customer Input\{TextBox2.Text}"
-        'newpath = $"\\fileserver1\ENGG_PRODUCTION\Current Project\{customer_input}\INPUTS\Customer Input"
 
         ' -- FILE SERVER: --
         Dim raw_string As String = $"\\fileserver1\Temp\Current Project\{customer_input}\INPUTS\Customer Input\{TextBox2.Text}"
         newpath = $"\\fileserver1\Temp\Current Project\{customer_input}\INPUTS\Customer Input"
 
-
-        ' -- LOCAL DISK: --
-        'Dim raw_string As String = $"D:\Current Project\{customer_input}\INPUTS\Customer Input\{TextBox2.Text}"
-        'newpath = $"D:\Current Project\{customer_input}\INPUTS\Customer Input"
-
-
         TextBox3.Text = raw_string
         Application.DoEvents()
 
         Dim topnode As TreeNode = TreeView1.Nodes.Add(TextBox2.Text)
-
-        ' Add child nodes to the parent node
-        'PopulateTreeView(TextBox3.Text, TreeView1.Nodes)
-
 
         Application.DoEvents()
         PopulateTreeView(TextBox3.Text, topnode.Nodes)
@@ -71,6 +58,7 @@ Public Class Form1
                 PopulateTreeView(subDirectory, directoryNode.Nodes)
                 parentNode.Add(directoryNode)
             Next
+
         Catch ex As Exception
             ' Handle any exceptions here
             Console.WriteLine(ex.Message)
@@ -113,7 +101,6 @@ Public Class Form1
         Application.DoEvents()
         Label6.Visible = True
         Application.DoEvents()
-        Label6.Text = "LOADING"
         ProgressBar1.Value = 15
         CreateFolder()
         YESORNOT = True
@@ -133,6 +120,7 @@ Public Class Form1
         'Dim sourcePath As String = $"{TextBox3.Text}\DSM-Template\XXXXXXBasic Design Data_R0.xlsx"
         Dim sourcePath As String = $"{TextBox3.Text}\DSM-Template\{excelfilename(excelfilename.Length - 1)}"
         Dim destinationPath As String = $"{TextBox3.Text}\Step-1-Output\{excelfilename(excelfilename.Length - 1)}"
+
         Dim EXCEL_WRITING As String
 
 
@@ -353,22 +341,7 @@ Public Class Form1
             ProgressBar1.Visible = False
 #End Region
 
-        Else
-
-
-
-
-
-
-
         End If
-
-
-        'MsgBox(skipRow)
-        'myList.IndexOf(elementToCheck) <> -1 
-
-
-
 
     End Sub
 
@@ -402,10 +375,6 @@ Public Class Form1
         End If
     End Sub
 
-
-
-
-
     Public Function Checknode(value As String)
 
 
@@ -421,8 +390,6 @@ Public Class Form1
 
 
     End Function
-
-
 
 
     'KILL THE EXCEL APPLICATION:
@@ -443,8 +410,6 @@ Public Class Form1
         Label4.Text = ""
 
     End Sub
-
-
 
 
     'FOLDER CREATION WITH THE TEXTBOX2:
@@ -477,10 +442,6 @@ Public Class Form1
             lines = File.ReadAllLines(filePath)
 
         End If
-
-    End Sub
-
-    Private Sub Label5_Click(sender As Object, e As EventArgs)
 
     End Sub
 End Class
